@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2025-10-06
+
+### Added
+- Markdown formatting support for digests (bold, links, numbered lists)
+- Hidden URLs in markdown links for cleaner text
+- Numbered posts within categories (1., 2., 3.)
+- Better source attribution format
+
+### Changed
+- **BREAKING**: Digest format now uses Markdown instead of plain text
+- LLM now generates digest title directly (removed duplicate headers)
+- Removed `_generate_header()` method from DigestGenerator
+- Updated all prompts to use Markdown formatting
+- Category names now use **bold** for better hierarchy
+- Links are now hidden in text instead of showing raw URLs
+
+### Improved
+- Much better readability in Telegram
+- Professional, clean appearance
+- Proper text hierarchy with bold headers
+- More compact format (hidden URLs)
+
 ## [0.3.0] - 2025-10-06
 
 ### Added

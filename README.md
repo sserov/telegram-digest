@@ -171,40 +171,48 @@ telegram-digest/
 
 ## Digest Format
 
-The digest is automatically structured by AI-generated categories based on the actual content of posts:
+The digest is automatically structured by AI-generated categories based on the actual content of posts.  
+Uses **Markdown formatting** for better readability in Telegram:
 
 ```
-📊 ML/AI Digest — October 1-3, 2025
+**📊 ML/AI Digest — 06 October 2025**
 
-🔬 Research & Papers
+**🔬 Research & Papers**
+
 Brief summary of research news and discoveries...
 
-• @channel_name (2025-10-01):
-🔗 https://t.me/channel/123
+1. **GPT-5 solves IMO-level problem** — First LLM to solve complex academic tasks
+   [Data Secrets, 06.10.2025]
 
-• @another_channel (2025-10-02):
-🔗 https://t.me/another/456
+2. **New transformer architecture** — Breakthrough in efficiency
+   [ML Research, 06.10.2025]
 
-━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━
 
-🛠️ Tools & Libraries
-New tools and libraries...
+**🛠️ Tools & Libraries**
 
-• @tools_channel (2025-10-01):
-🔗 https://t.me/tools/789
+New tools and frameworks released...
 
-━━━━━━━━━━━━━━━━━━━━━
+1. **PyTorch 2.5 released** — Major performance improvements
+   [AI News, 06.10.2025]
 
-📰 Industry News
+━━━━━━━━━━━━━━━━
+
+**📰 Industry News**
+
 Latest news and announcements...
 
-━━━━━━━━━━━━━━━━━━━━━
-
-📚 Tutorials & Education
-Educational materials and guides...
+1. **OpenAI DevDay 2025** — Agent Builder platform announced
+   [Tech Digest, 06.10.2025]
 ```
 
-**Note:** Categories are not hardcoded. The AI analyzes post content and creates relevant categories dynamically (e.g., 🚀 Product Releases, 💡 Insights, 🎯 Applications, 🤖 Models, etc.).
+**Key features:**
+- **Bold** headers and titles for better hierarchy
+- Numbered lists for posts within categories
+- Hidden URLs (links embedded in text)
+- Emoji categories for visual organization
+- Clean separators between sections
+- Dynamic categories based on content
 
 ## Getting Telegram API Credentials
 
