@@ -53,12 +53,45 @@ TELEGRAM_API_HASH=abcdef1234567890abcdef1234567890  # your api_hash
 CEREBRAS_API_KEY=csk-xxxxxxxxxxxxxxxxxxxxx  # your key
 ```
 
-## Step 4: First Run
+## Step 4: (Optional) Configure Channels
 
-On first run, Telegram will ask you to authorize:
+**Recommended**: Create `channels.yaml` for easier channel management:
 
 ```bash
-python -m src.main --channels @ai_newz @nn_for_science @kurilka_yandex --start-date 2025-10-04 --end-date 2025-10-05
+# Copy example
+cp channels.yaml.example channels.yaml
+
+# Open channels.yaml in text editor
+nano channels.yaml  # or use any editor
+```
+
+Edit with your channels:
+```yaml
+channels:
+  - "@ai_news"
+  - "@ml_research"
+  - "@your_channel"
+
+groups:
+  news:
+    - "@ai_news"
+  
+  research:
+    - "@ml_research"
+```
+
+This allows running without --channels argument!
+
+## Step 5: First Run
+
+**With channels.yaml:**
+```bash
+python -m src.main
+```
+
+**Or specify channels directly:**
+```bash
+python -m src.main --channels @ai_news @ml_research --start-date 2025-10-04 --end-date 2025-10-05
 ```
 
 **Authorization process:**
@@ -79,7 +112,17 @@ The script will do the following:
 
 ## Usage Examples
 
-### Basic Example
+### Basic Example (with channels.yaml)
+```bash
+python -m src.main
+```
+
+### Use Specific Group
+```bash
+python -m src.main --group research
+```
+
+### Override Channels
 ```bash
 python -m src.main \
   --channels @ai_news @ml_research \
