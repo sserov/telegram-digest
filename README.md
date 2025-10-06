@@ -177,42 +177,40 @@ Uses **Markdown formatting** for better readability in Telegram:
 ```
 **📊 ML/AI Digest — 06 October 2025**
 
-**🔬 Research & Papers**
+**🔬 Прорывы в исследованиях**
 
-Brief summary of research news and discoveries...
+📝 *GPT-5 впервые решила две сложные академические задачи, подтвердив рост ИИ в логическом и математическом мышлении.*
 
-1. **GPT-5 solves IMO-level problem** — First LLM to solve complex academic tasks
-   [Data Secrets, 06.10.2025]
+1. **[GPT-5 решила задачу уровня IMO](https://t.me/data_secrets/7955)** — Первая LLM, решившая сложную математическую задачу
+   *[Data Secrets, 06.10.2025]*
 
-2. **New transformer architecture** — Breakthrough in efficiency
-   [ML Research, 06.10.2025]
+2. **[Опровержение гипотезы в теории информации](https://t.me/data_secrets/7955)** — Найден контрпример для систем передачи данных
+   *[Data Secrets, 06.10.2025]*
 
-━━━━━━━━━━━━━━━━
+**🛠️ Новые продукты**
 
-**🛠️ Tools & Libraries**
+📝 *OpenAI готовится представить Agent Builder — инструмент для создания ИИ-агентов без программирования.*
 
-New tools and frameworks released...
+1. **[OpenAI Agent Builder анонсирован](https://t.me/data_secrets/7957)** — Low-code платформа для оркестрации агентов
+   *[Data Secrets, 06.10.2025]*
 
-1. **PyTorch 2.5 released** — Major performance improvements
-   [AI News, 06.10.2025]
+**� Кадровые перемены**
 
-━━━━━━━━━━━━━━━━
+📝 *Anthropic укрепляет техническое руководство, делая ставку на инфраструктуру.*
 
-**📰 Industry News**
-
-Latest news and announcements...
-
-1. **OpenAI DevDay 2025** — Agent Builder platform announced
-   [Tech Digest, 06.10.2025]
+1. **[Рахул Патил стал CTO Anthropic](https://t.me/data_secrets/7958)** — Фокус на инфраструктуре и вычислениях
+   *[Data Secrets, 06.10.2025]*
 ```
 
 **Key features:**
-- **Bold** headers and titles for better hierarchy
+- **Bold** headers and category names
+- 📝 *Italic* category summaries for clear separation
+- **Clickable post titles** as hyperlinks
+- *Italic* source attribution
 - Numbered lists for posts within categories
-- Hidden URLs (links embedded in text)
-- Emoji categories for visual organization
-- Clean separators between sections
+- No visual separators - clean line breaks
 - Dynamic categories based on content
+- Category names in same language as posts
 
 ## Getting Telegram API Credentials
 

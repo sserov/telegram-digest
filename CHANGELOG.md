@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2025-10-06
+
+### Added
+- Clickable hyperlinks for post titles: **[Title](url)**
+- 📝 emoji marker for category summaries in *italic*
+- Automatic language matching for category names
+
+### Changed
+- Removed ━━━━━━━━━━ separators between categories
+- Post titles now clickable hyperlinks instead of plain text
+- Category summaries in *italic* with 📝 for visual separation
+- Source attribution in *italic* for better readability
+- Category names auto-detected in same language as posts
+
+### Improved
+- Cleaner, more modern appearance
+- Better navigation with clickable titles
+- Clear visual hierarchy (summary vs posts)
+- Proper localization of category names
+
 ## [0.3.1] - 2025-10-06
 
 ### Added
