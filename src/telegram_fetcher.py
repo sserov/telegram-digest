@@ -86,6 +86,102 @@ class TelegramFetcher:
             return []
         return re.findall(r"https?://[^\s]+", text)
 
+    @staticmethod
+    def extract_folder_slug(url: str) -> Optional[str]:
+        """
+        Extract folder slug from Telegram folder invite link.
+        
+        Args:
+            url: Folder invite URL (e.g., https://t.me/addlist/Wv30yLzHEuw4YTky)
+            
+        Returns:
+            Folder slug if found, None otherwise
+        """
+        # Pattern: https://t.me/addlist/SLUG
+        match = re.search(r't\.me/addlist/([A-Za-z0-9_-]+)', url)
+        if match:
+            return match.group(1)
+        return None
+
+    async def get_channels_from_folder(self, folder_url: str) -> List[str]:
+        """
+        Get list of channel usernames from a Telegram folder invite link.
+        
+        Args:
+            folder_url: Folder invite URL (e.g., https://t.me/addlist/Wv30yLzHEuw4YTky)
+            
+        Returns:
+            List of channel usernames (with @ prefix)
+            
+        Raises:
+            ValueError: If URL is invalid or folder cannot be accessed
+        """
+        if not self.client:
+            raise RuntimeError("Client not initialized. Use 'async with' context manager.")
+        
+        slug = self.extract_folder_slug(folder_url)
+        if not slug:
+            raise ValueError(f"Invalid folder URL: {folder_url}")
+        
+        try:
+            # Import Telethon types
+            from telethon.tl.functions.chatlists import CheckChatlistInviteRequest
+            from telethon.tl.types.chatlists import ChatlistInvite, ChatlistInviteAlready
+            from telethon.tl.types import InputChatlistDialogFilter
+            
+            # Get folder info
+            result = await self.client(CheckChatlistInviteRequest(slug=slug))
+            
+            # Handle different response types
+            chats = []
+            if isinstance(result, ChatlistInviteAlready):
+                # User is already in this folder
+                # The chats are available in the response's chats field
+                if hasattr(result, 'chats') and result.chats:
+                    chats = result.chats
+                elif hasattr(result, 'missing_peers') and result.missing_peers:
+                    # Some chats might be in missing_peers
+                    for peer in result.missing_peers:
+                        entity = await self.client.get_entity(peer)
+                        chats.append(entity)
+                else:
+                    raise ValueError("Could not extract channels from folder (already joined)")
+                        
+            elif isinstance(result, ChatlistInvite):
+                # User hasn't joined this folder yet
+                # Chats are available directly in the chats field
+                if hasattr(result, 'chats') and result.chats:
+                    chats = result.chats
+                elif hasattr(result, 'peers') and result.peers:
+                    # Some versions might have peers instead
+                    for peer in result.peers:
+                        entity = await self.client.get_entity(peer)
+                        chats.append(entity)
+                else:
+                    raise ValueError("Folder invite doesn't contain channel list")
+            else:
+                raise ValueError(f"Unexpected response type: {type(result)}")
+            
+            # Extract channel usernames
+            channels = []
+            for chat in chats:
+                if hasattr(chat, 'username') and chat.username:
+                    channels.append(f"@{chat.username}")
+                elif hasattr(chat, 'title'):
+                    # For channels without username, use title (may need manual adjustment)
+                    print(f"⚠️  Found channel without username: {chat.title} (ID: {chat.id})")
+                    print(f"   You may need to use channel ID: {chat.id}")
+            
+            if not channels:
+                print(f"⚠️  No accessible channels found in folder: {folder_url}")
+            else:
+                print(f"✅ Found {len(channels)} channels in folder: {', '.join(channels)}")
+            
+            return channels
+            
+        except Exception as e:
+            raise ValueError(f"Failed to access folder {folder_url}: {e}")
+
     async def fetch_messages(
         self,
         channels: List[str],

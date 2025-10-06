@@ -180,6 +180,27 @@ async def main_async():
             user_info = await fetcher.get_user_info()
             print(f"Authenticated as: {user_info['first_name']} (@{user_info['username']})")
 
+            # Check if channels list contains folder links
+            if Config.has_folder_links(channels):
+                print("\n🔄 Detected folder links, expanding...")
+                expanded_channels = []
+                for item in channels:
+                    if 't.me/addlist/' in item:
+                        # This is a folder link
+                        print(f"   Expanding folder: {item}")
+                        try:
+                            folder_channels = await fetcher.get_channels_from_folder(item)
+                            expanded_channels.extend(folder_channels)
+                        except Exception as e:
+                            print(f"   ⚠️  Failed to expand folder {item}: {e}")
+                    else:
+                        # Regular channel
+                        expanded_channels.append(item)
+                
+                # Remove duplicates while preserving order
+                channels = list(dict.fromkeys(expanded_channels))
+                print(f"\n✅ Expanded to {len(channels)} channels: {', '.join(channels)}\n")
+
             messages = await fetcher.fetch_messages(channels, start_date, end_date)
 
             print(f"\n✅ Fetched {len(messages)} messages total\n")

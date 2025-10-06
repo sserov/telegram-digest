@@ -141,6 +141,22 @@ class Config:
         return channels
 
     @classmethod
+    def has_folder_links(cls, channels: List[str]) -> bool:
+        """
+        Check if channel list contains any folder links.
+        
+        Args:
+            channels: List of channels (may include folder URLs)
+            
+        Returns:
+            True if any folder links found
+        """
+        for item in channels:
+            if isinstance(item, str) and 't.me/addlist/' in item:
+                return True
+        return False
+
+    @classmethod
     def get_default_settings(cls, config_path: str = "channels.yaml") -> Dict[str, Any]:
         """
         Get default settings from YAML configuration.

@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-10-07
+
+### Added
+- **Telegram folder invite link support** - Automatically expand folder links to channel lists
+- `extract_folder_slug()` method to parse `t.me/addlist/` URLs
+- `get_channels_from_folder()` method to resolve folders via Telethon API
+- `has_folder_links()` helper in Config to detect folder URLs
+- Support for both `ChatlistInvite` and `ChatlistInviteAlready` response types
+- Folder links work in `channels.yaml`, CLI arguments, and channel groups
+
+### Improved
+- Automatic duplicate removal when expanding multiple folder links
+- Clear console feedback when expanding folders (channel count and names)
+- Error handling for invalid folder URLs or access issues
+- Support for mixing regular channels and folder links
+
+### Documentation
+- Updated `channels.yaml.example` with folder link examples
+- Added folder link usage to README.md
+- Documented folder link feature in Copilot instructions
+
 ## [0.4.0] - 2025-10-07
 
 ### Changed
