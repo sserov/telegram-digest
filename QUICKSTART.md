@@ -140,12 +140,17 @@ python -m src.main \
 ```
 
 ### Send to Telegram Channel
+
+Requires `TELEGRAM_BOT_TOKEN` in `.env`:
+
 ```bash
 python -m src.main \
   --channels @ai_news \
   --send-to-telegram \
   --telegram-target @my_digest_channel
 ```
+
+Note: Uses Telegram Bot API with HTML formatting.
 
 ## Troubleshooting
 
@@ -167,8 +172,8 @@ Check that the channel name is correct and starts with @.
 
 1. **Automation**: Set up cron for daily runs
 2. **Customization**: Change prompts in `src/cerebras_client.py`
-3. **Add channels**: Edit the list in command or in code
-4. **Telegram bot**: Set up sending via bot (get token from @BotFather)
+3. **Add channels**: Edit the list in command or config
+4. **Bot setup**: Get token from @BotFather for Telegram sending (required)
 
 ## Useful Links
 

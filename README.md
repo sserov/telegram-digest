@@ -11,17 +11,17 @@ This project collects posts from specified Telegram channels over a defined peri
 - 📥 Collect posts from multiple Telegram channels
 - 📅 Filter posts by date (can specify a date range)
 - 🤖 Generate structured digests using Cerebras AI
-- 📊 Automatic grouping by categories (Research, Tools, News, Tutorials, Other)
+- 📊 Automatic grouping by categories with importance-based sorting
 - 💾 Save digest to text file
-- 📤 Send digest to Telegram channel
+- 📤 Send digest to Telegram via Bot API (HTML formatting)
 - 🔄 Map-reduce processing for large data volumes
 
 ## Requirements
 
 - Python 3.9+
-- Telegram API credentials (api_id and api_hash)
-- Cerebras API key
-- (Optional) Telegram Bot Token for sending digests
+- Telegram API credentials (api_id and api_hash) for reading messages
+- Cerebras API key for AI digest generation
+- Telegram Bot Token for sending digests (get from @BotFather)
 
 ## Installation
 
@@ -55,7 +55,8 @@ TELEGRAM_API_HASH=your_api_hash
 # Cerebras AI API (get from https://cloud.cerebras.ai/)
 CEREBRAS_API_KEY=your_cerebras_api_key
 
-# (Optional) For sending digest via bot
+# Telegram Bot Token (required for sending digests to Telegram)
+# Get from @BotFather: https://t.me/BotFather
 TELEGRAM_BOT_TOKEN=your_bot_token
 
 # (Optional) Channel for publishing digest
@@ -130,11 +131,15 @@ python -m src.main \
 
 ### Send to Telegram
 
+Sends digest to Telegram via Bot API (requires `TELEGRAM_BOT_TOKEN` in `.env`):
+
 ```bash
 python -m src.main \
   --send-to-telegram \
   --telegram-target @my_digest_channel
 ```
+
+Note: Digest is formatted using HTML markup (bold, links, blockquotes).
 
 ### All Options
 
@@ -171,40 +176,51 @@ telegram-digest/
 
 ## Digest Format
 
-The digest is automatically structured by AI-generated categories based on the actual content of posts:
+The digest is automatically structured with AI-identified categories based on content.  
+Uses **HTML formatting** when sent to Telegram (converted from Markdown internally):
+
+- **Bold** for category names and headlines
+- Clickable links to source posts
+- `<blockquote>` for detailed summaries
+- Categories and news sorted by importance
 
 ```
-📊 ML/AI Digest — October 1-3, 2025
+**📊 ML/AI Digest — 06 October 2025**
 
-🔬 Research & Papers
-Brief summary of research news and discoveries...
+**🔬 Прорывы в исследованиях**
 
-• @channel_name (2025-10-01):
-🔗 https://t.me/channel/123
+📝 *GPT-5 впервые решила две сложные академические задачи, подтвердив рост ИИ в логическом и математическом мышлении.*
 
-• @another_channel (2025-10-02):
-🔗 https://t.me/another/456
+1. **[GPT-5 решила задачу уровня IMO](https://t.me/data_secrets/7955)** — Первая LLM, решившая сложную математическую задачу
+   *[Data Secrets, 06.10.2025]*
 
-━━━━━━━━━━━━━━━━━━━━━
+2. **[Опровержение гипотезы в теории информации](https://t.me/data_secrets/7955)** — Найден контрпример для систем передачи данных
+   *[Data Secrets, 06.10.2025]*
 
-🛠️ Tools & Libraries
-New tools and libraries...
+**🛠️ Новые продукты**
 
-• @tools_channel (2025-10-01):
-🔗 https://t.me/tools/789
+📝 *OpenAI готовится представить Agent Builder — инструмент для создания ИИ-агентов без программирования.*
 
-━━━━━━━━━━━━━━━━━━━━━
+1. **[OpenAI Agent Builder анонсирован](https://t.me/data_secrets/7957)** — Low-code платформа для оркестрации агентов
+   *[Data Secrets, 06.10.2025]*
 
-📰 Industry News
-Latest news and announcements...
+**� Кадровые перемены**
 
-━━━━━━━━━━━━━━━━━━━━━
+📝 *Anthropic укрепляет техническое руководство, делая ставку на инфраструктуру.*
 
-📚 Tutorials & Education
-Educational materials and guides...
+1. **[Рахул Патил стал CTO Anthropic](https://t.me/data_secrets/7958)** — Фокус на инфраструктуре и вычислениях
+   *[Data Secrets, 06.10.2025]*
 ```
 
-**Note:** Categories are not hardcoded. The AI analyzes post content and creates relevant categories dynamically (e.g., 🚀 Product Releases, 💡 Insights, 🎯 Applications, 🤖 Models, etc.).
+**Key features:**
+- **Bold** headers and category names
+- 📝 *Italic* category summaries for clear separation
+- **Clickable post titles** as hyperlinks
+- *Italic* source attribution
+- Numbered lists for posts within categories
+- No visual separators - clean line breaks
+- Dynamic categories based on content
+- Category names in same language as posts
 
 ## Getting Telegram API Credentials
 

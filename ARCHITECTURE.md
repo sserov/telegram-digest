@@ -116,7 +116,7 @@
    │
    ├─ Console: Print formatted digest
    ├─ File: Save to digest_TIMESTAMP.txt
-   └─ Telegram: Send to channel/chat
+   └─ Telegram: Send via Bot API (HTTP, HTML formatting)
 ```
 
 ## Component Interactions
@@ -137,7 +137,8 @@
 │   _fetcher   │  │   _client    │  │   _handler   │
 │              │  │              │  │              │
 │ - Session    │  │ - API Client │  │ - File I/O   │
-│ - Messages   │  │ - Prompts    │  │ - TG Send    │
+│ - Messages   │  │ - Prompts    │  │ - Bot API    │
+│ - Channels   │  │ - Streaming  │  │ - HTML fmt   │
 │ - Filtering  │  │ - Map-reduce │  │ - Splitting  │
 └──────────────┘  └──────────────┘  └──────────────┘
         │                 │                 │

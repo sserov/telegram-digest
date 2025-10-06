@@ -5,6 +5,74 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2025-10-07
+
+### Changed
+- **BREAKING**: Switched to Bot API only for Telegram sending (removed Telethon sending)
+- **BREAKING**: Changed from MarkdownV2 to HTML formatting for better reliability
+- **BREAKING**: Removed `--use-bot` CLI argument (Bot API is now the only option)
+- Digest format: category → emoji + bold headline → optional quote → links
+- Categories and news items now sorted by importance
+
+### Added
+- Smart Markdown to HTML converter for Telegram Bot API
+- Importance-based sorting for categories and news items
+- News headline structure with 🔹 emoji
+- Optional detailed summaries as `<blockquote>`
+
+### Removed
+- Legacy Telethon sending methods (`_send_via_bot`, `_send_via_user_client`)
+- Complex MarkdownV2 escaping logic
+- `--use-bot` CLI parameter
+
+### Improved
+- Simpler, more reliable message sending via HTTP
+- Better formatting with HTML (bold, links, blockquotes)
+- Fewer escaping edge cases
+- Disabled link previews for cleaner appearance
+
+## [0.3.2] - 2025-10-06
+
+### Added
+- Clickable hyperlinks for post titles: **[Title](url)**
+- 📝 emoji marker for category summaries in *italic*
+- Automatic language matching for category names
+
+### Changed
+- Removed ━━━━━━━━━━ separators between categories
+- Post titles now clickable hyperlinks instead of plain text
+- Category summaries in *italic* with 📝 for visual separation
+- Source attribution in *italic* for better readability
+- Category names auto-detected in same language as posts
+
+### Improved
+- Cleaner, more modern appearance
+- Better navigation with clickable titles
+- Clear visual hierarchy (summary vs posts)
+- Proper localization of category names
+
+## [0.3.1] - 2025-10-06
+
+### Added
+- Markdown formatting support for digests (bold, links, numbered lists)
+- Hidden URLs in markdown links for cleaner text
+- Numbered posts within categories (1., 2., 3.)
+- Better source attribution format
+
+### Changed
+- **BREAKING**: Digest format now uses Markdown instead of plain text
+- LLM now generates digest title directly (removed duplicate headers)
+- Removed `_generate_header()` method from DigestGenerator
+- Updated all prompts to use Markdown formatting
+- Category names now use **bold** for better hierarchy
+- Links are now hidden in text instead of showing raw URLs
+
+### Improved
+- Much better readability in Telegram
+- Professional, clean appearance
+- Proper text hierarchy with bold headers
+- More compact format (hidden URLs)
+
 ## [0.3.0] - 2025-10-06
 
 ### Added
