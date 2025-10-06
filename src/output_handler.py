@@ -77,63 +77,45 @@ class OutputHandler:
         
         We preserve markdown syntax like **bold**, [text](url), and > quotes.
         """
-        # Don't escape content inside [text](url) patterns
-        def escape_outside_links(text):
-            result = []
-            i = 0
-            while i < len(text):
-                # Check for [text](url) pattern
-                if text[i] == '[':
-                    bracket_end = text.find('](', i)
-                    if bracket_end != -1:
-                        paren_end = text.find(')', bracket_end + 2)
-                        if paren_end != -1:
-                            # This is a link, keep as is
-                            result.append(text[i:paren_end + 1])
-                            i = paren_end + 1
-                            continue
-                result.append(text[i])
-                i += 1
-            return ''.join(result)
-        
-        # Characters that need escaping (except those in links)
+        # Characters that need escaping
         special_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
         
-        escaped = escape_outside_links(text)
-        
-        # Now escape special characters, but preserve **bold** and > at line start
         result = []
         i = 0
-        while i < len(escaped):
-            char = escaped[i]
+        
+        while i < len(text):
+            # Preserve **bold** (two asterisks)
+            if i < len(text) - 1 and text[i:i+2] == '**':
+                # Find closing **
+                close_pos = text.find('**', i + 2)
+                if close_pos != -1:
+                    # Keep the entire **text** as is
+                    result.append(text[i:close_pos + 2])
+                    i = close_pos + 2
+                    continue
             
-            # Preserve **bold**
-            if char == '*' and i + 1 < len(escaped) and escaped[i + 1] == '*':
-                result.append('**')
-                i += 2
-                continue
+            # Preserve [text](url) links
+            if text[i] == '[':
+                bracket_end = text.find('](', i)
+                if bracket_end != -1:
+                    paren_end = text.find(')', bracket_end + 2)
+                    if paren_end != -1:
+                        # Keep the entire [text](url) as is
+                        result.append(text[i:paren_end + 1])
+                        i = paren_end + 1
+                        continue
             
-            # Preserve > at start of line (quotes)
-            if char == '>' and (i == 0 or escaped[i - 1] == '\n'):
+            # Preserve > at start of line (block quotes)
+            if text[i] == '>' and (i == 0 or text[i - 1] == '\n'):
                 result.append('>')
                 i += 1
                 continue
             
-            # Preserve links [text](url) - already handled above
-            if char == '[':
-                bracket_end = escaped.find('](', i)
-                if bracket_end != -1:
-                    paren_end = escaped.find(')', bracket_end + 2)
-                    if paren_end != -1:
-                        result.append(escaped[i:paren_end + 1])
-                        i = paren_end + 1
-                        continue
-            
             # Escape special characters
-            if char in special_chars:
-                result.append('\\' + char)
+            if text[i] in special_chars:
+                result.append('\\' + text[i])
             else:
-                result.append(char)
+                result.append(text[i])
             
             i += 1
         

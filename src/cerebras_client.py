@@ -128,14 +128,17 @@ IMPORTANT: Format for Telegram using Markdown.
 Your task:
 1. Analyze the content of posts and identify natural thematic categories
 2. Group posts by these categories (don't force predetermined categories)
-3. Create a brief summary for each category
-4. List relevant posts with links for each category
+3. For each category, identify individual news items (can combine related posts)
+4. Sort categories by importance (impact, novelty, relevance)
+5. Sort news items within each category by importance
+6. Create concise headlines and optional detailed summaries for each news item
 
 Guidelines for categories:
 - Identify 3-7 natural categories based on actual post content
 - Use descriptive emoji that matches the category theme
 - **Category names MUST be in the same language as the posts** (Russian posts → Russian categories, English posts → English categories)
 - Category names should be clear and concise (1-3 words)
+- Sort by importance: groundbreaking research > major releases > tools/tutorials > discussions
 - Examples of possible categories (but adapt based on content):
   🔬 Research / 🛠️ Tools / 📰 News / 📚 Tutorials / 🚀 Releases
   💡 Insights / 🎯 Applications / 🔧 Infrastructure / 🌐 Community
@@ -145,33 +148,36 @@ Output format for Telegram (using Markdown):
 
 **📊 ML/AI Digest — [date in format: DD Month YYYY]**
 
-For each category you identified:
+For each category you identified (sorted by importance, most important first):
 
 **[Emoji] [Category Name in same language as posts]**
 
-📝 Brief summary (1-2 sentences) highlighting the main point.
+For each news item in this category (sorted by importance):
 
->Detailed expandable summary (2-4 sentences) with comprehensive coverage of all key points. This gives readers full context if they want to dive deeper.
+🔹 **[News headline - concise title for this news item]**
+
+>Optional detailed summary if needed (2-4 sentences) with comprehensive context. This gives readers full details about this specific news.
 
 [Source channel name](post_url)
 [Source channel name](post_url)
-[Source channel name](post_url)
 
-(List Telegram post links, one per line. Use quote > for expandable detailed summary. If multiple posts from same channel, repeat channel name with different URLs)
+(Repeat for each news item in category)
 
 [Next category without separator...]
 
 Rules:
-- Use **bold** for digest title and **bold** for category names (including emoji)
-- Use 📝 emoji before short summary (1-2 sentences, plain text)
-- Add detailed summary in quote format: >text (this creates expandable block quote in Telegram)
-- After summaries, list channel links normally: [Channel name](url)
+- Use **bold** for digest title and category names
+- For each news item: emoji 🔹 + **bold headline**
+- Add detailed summary as quote >text ONLY if there's substantial additional context to provide
+- After summary (or headline if no summary), list channel links: [Channel name](url)
 - Format: [Channel name](telegram_post_url) - one link per line
 - Include ONLY Telegram post links (t.me/...), exclude external links (twitter, arxiv, github, etc.)
-- If same channel has multiple posts, repeat channel name with different URLs
-- Use line breaks for readability between categories (no separators)
+- If multiple posts cover same news, combine them under one headline with multiple source links
+- Use line breaks between news items and categories
+- Sort categories by importance (most impactful first)
+- Sort news items within each category by importance
 - Categories should emerge from content, not be forced
-- Category names in the same language as post content"""
+- Category names and headlines in the same language as post content"""
 
     @staticmethod
     def _create_user_prompt(
