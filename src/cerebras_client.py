@@ -134,6 +134,7 @@ Your task:
 Guidelines for categories:
 - Identify 3-7 natural categories based on actual post content
 - Use descriptive emoji that matches the category theme
+- **Category names MUST be in the same language as the posts** (Russian posts → Russian categories, English posts → English categories)
 - Category names should be clear and concise (1-3 words)
 - Examples of possible categories (but adapt based on content):
   🔬 Research / 🛠️ Tools / 📰 News / 📚 Tutorials / 🚀 Releases
@@ -146,33 +147,32 @@ Output format for Telegram (using Markdown):
 
 For each category you identified:
 
-**[Emoji] [Category Name]**
+**[Emoji] [Category Name in same language as posts]**
 
-Brief summary (2-4 sentences) of key points in this category.
+📝 *Brief summary (2-4 sentences) of key points in this category.*
 
-1. **[Title/Topic]** — Brief description
-   [Source channel name, date]
+1. **[Post title as hyperlink](post_url)** — Brief description
+   *[Source channel name, date]*
    
-2. **[Title/Topic]** — Brief description  
-   [Source channel name, date]
+2. **[Post title as hyperlink](post_url)** — Brief description  
+   *[Source channel name, date]*
 
 (Repeat for all posts in category)
 
-━━━━━━━━━━━━━━━━
-
-[Next category...]
+[Next category without separator...]
 
 Rules:
-- Use **bold** for digest title, category names, and post titles
-- Use *italic* for emphasis if needed
-- Hide URLs in markdown links: [text](url) — don't show raw URLs
+- Use **bold** for digest title, category names, and post titles as hyperlinks
+- Use 📝 emoji before category summary in *italic* to visually separate it from posts
+- Make post titles clickable hyperlinks: **[Title](url)**
+- Use *italic* for source attribution
 - Use numbered lists (1., 2., 3.) for posts within each category
-- Use line breaks for readability
-- Add separator ━━━━━━━━━━ between categories
+- Use line breaks for readability between categories (no separators)
 - Keep it concise and scannable
-- Preserve all original links as hidden hyperlinks
+- ALL post titles MUST be hyperlinks to original messages
 - Categories should emerge from content, not be forced
-- Source attribution format: [Channel name, DD.MM.YYYY]"""
+- Category names in the same language as post content
+- Source attribution format: *[Channel name, DD.MM.YYYY]*"""
 
     @staticmethod
     def _create_user_prompt(
@@ -188,7 +188,12 @@ Rules:
 
 {messages_text}
 
-IMPORTANT: Format for Telegram using Markdown - use **bold** for titles/categories, hide URLs as [text](url), use numbered lists for posts."""
+IMPORTANT: Format for Telegram using Markdown:
+- Category names in the SAME LANGUAGE as posts
+- Post titles as hyperlinks: **[Title](url)**
+- Category summary with 📝 in *italic*
+- Source in *italic*: *[Channel, DD.MM.YYYY]*
+- No separators between categories"""
 
     @staticmethod
     def _create_reduce_prompt(combined_summaries: str) -> str:
@@ -209,12 +214,14 @@ Partial digests:
 
 IMPORTANT: Create final digest using Telegram Markdown format:
 - Identify natural categories from the content (don't force predetermined ones)
+- Category names in the SAME LANGUAGE as post content
 - Use appropriate emojis for each category based on its theme
-- Use **bold** for digest title, category names, and post titles
-- Hide URLs as markdown links: [text](url)
+- Use **bold** for digest title and category names
+- Post titles as clickable hyperlinks: **[Title](url)**
+- Category summary with 📝 emoji in *italic*
+- Source attribution in *italic*: *[Channel, DD.MM.YYYY]*
 - Use numbered lists (1., 2., 3.) for posts within each category
-- Use line breaks for readability
-- Add ━━━━━━━━━━ separator between categories
+- Use line breaks between categories (NO separators like ━━━━)
 - Categories should reflect the actual content, not predetermined templates"""
 
 
