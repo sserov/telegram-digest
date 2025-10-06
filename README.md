@@ -11,17 +11,17 @@ This project collects posts from specified Telegram channels over a defined peri
 - 📥 Collect posts from multiple Telegram channels
 - 📅 Filter posts by date (can specify a date range)
 - 🤖 Generate structured digests using Cerebras AI
-- 📊 Automatic grouping by categories (Research, Tools, News, Tutorials, Other)
+- 📊 Automatic grouping by categories with importance-based sorting
 - 💾 Save digest to text file
-- 📤 Send digest to Telegram channel
+- 📤 Send digest to Telegram via Bot API (HTML formatting)
 - 🔄 Map-reduce processing for large data volumes
 
 ## Requirements
 
 - Python 3.9+
-- Telegram API credentials (api_id and api_hash)
-- Cerebras API key
-- (Optional) Telegram Bot Token for sending digests
+- Telegram API credentials (api_id and api_hash) for reading messages
+- Cerebras API key for AI digest generation
+- Telegram Bot Token for sending digests (get from @BotFather)
 
 ## Installation
 
@@ -55,7 +55,8 @@ TELEGRAM_API_HASH=your_api_hash
 # Cerebras AI API (get from https://cloud.cerebras.ai/)
 CEREBRAS_API_KEY=your_cerebras_api_key
 
-# (Optional) For sending digest via bot
+# Telegram Bot Token (required for sending digests to Telegram)
+# Get from @BotFather: https://t.me/BotFather
 TELEGRAM_BOT_TOKEN=your_bot_token
 
 # (Optional) Channel for publishing digest
@@ -130,11 +131,15 @@ python -m src.main \
 
 ### Send to Telegram
 
+Sends digest to Telegram via Bot API (requires `TELEGRAM_BOT_TOKEN` in `.env`):
+
 ```bash
 python -m src.main \
   --send-to-telegram \
   --telegram-target @my_digest_channel
 ```
+
+Note: Digest is formatted using HTML markup (bold, links, blockquotes).
 
 ### All Options
 
@@ -171,8 +176,13 @@ telegram-digest/
 
 ## Digest Format
 
-The digest is automatically structured by AI-generated categories based on the actual content of posts.  
-Uses **Markdown formatting** for better readability in Telegram:
+The digest is automatically structured with AI-identified categories based on content.  
+Uses **HTML formatting** when sent to Telegram (converted from Markdown internally):
+
+- **Bold** for category names and headlines
+- Clickable links to source posts
+- `<blockquote>` for detailed summaries
+- Categories and news sorted by importance
 
 ```
 **📊 ML/AI Digest — 06 October 2025**

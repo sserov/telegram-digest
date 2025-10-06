@@ -43,8 +43,9 @@ telegram-digest/
 
 4. **OutputHandler** (`output_handler.py`)
    - Saves digest to files
-   - Sends digest to Telegram (via bot or user client)
+   - Sends digest to Telegram via Bot API (HTTP requests with HTML formatting)
    - Handles long messages (splitting)
+   - Converts Markdown to HTML for Telegram
 
 5. **Config** (`config.py`)
    - Centralizes configuration
@@ -75,7 +76,7 @@ Required:
 - `CEREBRAS_API_KEY`: Your Cerebras API key
 
 Optional:
-- `TELEGRAM_BOT_TOKEN`: Bot token for sending via bot
+- `TELEGRAM_BOT_TOKEN`: Bot token for sending digests (required for Telegram output)
 - `OUTPUT_TELEGRAM_CHANNEL`: Default output channel
 - `CEREBRAS_MODEL`: Model to use (default: llama3.1-70b)
 - `TEMPERATURE`: Generation temperature (default: 0.0)

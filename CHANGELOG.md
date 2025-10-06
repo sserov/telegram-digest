@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2025-10-07
+
+### Changed
+- **BREAKING**: Switched to Bot API only for Telegram sending (removed Telethon sending)
+- **BREAKING**: Changed from MarkdownV2 to HTML formatting for better reliability
+- **BREAKING**: Removed `--use-bot` CLI argument (Bot API is now the only option)
+- Digest format: category → emoji + bold headline → optional quote → links
+- Categories and news items now sorted by importance
+
+### Added
+- Smart Markdown to HTML converter for Telegram Bot API
+- Importance-based sorting for categories and news items
+- News headline structure with 🔹 emoji
+- Optional detailed summaries as `<blockquote>`
+
+### Removed
+- Legacy Telethon sending methods (`_send_via_bot`, `_send_via_user_client`)
+- Complex MarkdownV2 escaping logic
+- `--use-bot` CLI parameter
+
+### Improved
+- Simpler, more reliable message sending via HTTP
+- Better formatting with HTML (bold, links, blockquotes)
+- Fewer escaping edge cases
+- Disabled link previews for cleaner appearance
+
 ## [0.3.2] - 2025-10-06
 
 ### Added
