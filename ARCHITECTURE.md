@@ -100,18 +100,16 @@
 6. LLM PROCESSING (Cerebras)
    │
    ├─ System Prompt:
-   │  └─ "Group by categories, create summaries, keep links..."
+   │  └─ "Analyze content, identify natural categories, create summaries, keep links..."
    │
    ├─ User Prompt:
    │  └─ Messages text
    │
    └─ Response:
-      └─ Structured digest with:
-         ├─ 🔬 Research: summary + links
-         ├─ 🛠️ Tools: summary + links
-         ├─ 📰 News: summary + links
-         ├─ 📚 Tutorials: summary + links
-         └─ 💡 Other: summary + links
+      └─ Structured digest with AI-generated categories:
+         ├─ [Emoji] [Category Name]: summary + links
+         ├─ [Emoji] [Category Name]: summary + links
+         └─ ... (3-7 categories based on content)
    │
    ▼
 7. OUTPUT
@@ -203,7 +201,8 @@
 │  (Merge into final digest)          │
 │                                     │
 │  Cerebras API →                     │
-│  - Merge categories                 │
+│  - Identify & merge similar topics  │
+│  - Generate appropriate categories  │
 │  - Remove duplicates                │
 │  - Consolidate links                │
 │  - Create final structure           │
@@ -213,6 +212,8 @@
        ┌────────────┐
        │   Final    │
        │   Digest   │
+       │ (Dynamic   │
+       │ Categories)│
        └────────────┘
 ```
 
