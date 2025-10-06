@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Telegram Digest Daily Runner
+# This script activates venv and runs digest generation
+#
+# SETUP:
+# 1. Copy this file: cp run_digest.sh.example run_digest.sh
+# 2. Edit run_digest.sh and replace PROJECT_DIR with your actual path
+# 3. Make executable: chmod +x run_digest.sh
+# 4. Test: ./run_digest.sh
+# 5. Add to cron: crontab -e
+#    0 22 * * * /path/to/run_digest.sh >> /path/to/cron.log 2>&1
+
+# Navigate to project directory
+# CHANGE THIS to your actual project path:
+PROJECT_DIR="/path/to/telegram-digest"
+cd "$PROJECT_DIR"
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Run digest generation and send to Telegram
+python -m src.main --send-to-telegram
+
+# Deactivate venv (optional, as script will exit anyway)
+deactivate
