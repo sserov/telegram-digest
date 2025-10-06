@@ -149,30 +149,29 @@ For each category you identified:
 
 **[Emoji] [Category Name in same language as posts]**
 
-📝 *Brief summary (2-4 sentences) of key points in this category.*
+📝 Brief summary (2-4 sentences) of key points in this category.
 
-1. **[Post title as hyperlink](post_url)** — Brief description
-   *[Source channel name, date]*
+1. Post title without hyperlink — Brief description
+   [Source channel name](post_url)
    
-2. **[Post title as hyperlink](post_url)** — Brief description  
-   *[Source channel name, date]*
+2. Post title without hyperlink — Brief description  
+   [Source channel name](post_url)
 
 (Repeat for all posts in category)
 
 [Next category without separator...]
 
 Rules:
-- Use **bold** for digest title, category names, and post titles as hyperlinks
-- Use 📝 emoji before category summary in *italic* to visually separate it from posts
-- Make post titles clickable hyperlinks: **[Title](url)**
-- Use *italic* for source attribution
+- Use **bold** for digest title and category names
+- Use 📝 emoji before category summary (without asterisks, just plain text)
+- Post titles should be plain text in numbered lists (NO hyperlinks in titles)
+- Each post must have source link at the end: [Channel name](url)
+- If multiple sources for one post, list all links: [Channel1](url1), [Channel2](url2)
 - Use numbered lists (1., 2., 3.) for posts within each category
 - Use line breaks for readability between categories (no separators)
 - Keep it concise and scannable
-- ALL post titles MUST be hyperlinks to original messages
 - Categories should emerge from content, not be forced
-- Category names in the same language as post content
-- Source attribution format: *[Channel name, DD.MM.YYYY]*"""
+- Category names in the same language as post content"""
 
     @staticmethod
     def _create_user_prompt(
@@ -190,9 +189,10 @@ Rules:
 
 IMPORTANT: Format for Telegram using Markdown:
 - Category names in the SAME LANGUAGE as posts
-- Post titles as hyperlinks: **[Title](url)**
-- Category summary with 📝 in *italic*
-- Source in *italic*: *[Channel, DD.MM.YYYY]*
+- Post titles as PLAIN TEXT (NO hyperlinks in titles)
+- Category summary with 📝 emoji (plain text, no asterisks)
+- Source links at the END of each post: [Channel name](url)
+- If multiple sources, list all: [Channel1](url1), [Channel2](url2)
 - No separators between categories"""
 
     @staticmethod
@@ -217,9 +217,10 @@ IMPORTANT: Create final digest using Telegram Markdown format:
 - Category names in the SAME LANGUAGE as post content
 - Use appropriate emojis for each category based on its theme
 - Use **bold** for digest title and category names
-- Post titles as clickable hyperlinks: **[Title](url)**
-- Category summary with 📝 emoji in *italic*
-- Source attribution in *italic*: *[Channel, DD.MM.YYYY]*
+- Post titles as PLAIN TEXT (NO hyperlinks in titles)
+- Category summary with 📝 emoji (plain text without asterisks)
+- Source links at the END of each post: [Channel name](url)
+- If post has multiple sources, list all links: [Channel1](url1), [Channel2](url2)
 - Use numbered lists (1., 2., 3.) for posts within each category
 - Use line breaks between categories (NO separators like ━━━━)
 - Categories should reflect the actual content, not predetermined templates"""
