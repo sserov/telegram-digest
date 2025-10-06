@@ -29,7 +29,7 @@ def parse_args() -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Generate digest for yesterday from configured channels
+  # Generate digest for today from configured channels
   python -m src.main
 
   # Specify channels and date range
@@ -56,13 +56,13 @@ Environment variables (set in .env file):
     parser.add_argument(
         "--start-date",
         type=parse_date,
-        help="Start date (YYYY-MM-DD). Default: yesterday",
+        help="Start date (YYYY-MM-DD). Default: today",
     )
 
     parser.add_argument(
         "--end-date",
         type=parse_date,
-        help="End date (YYYY-MM-DD), exclusive. Default: today",
+        help="End date (YYYY-MM-DD), exclusive. Default: tomorrow",
     )
 
     parser.add_argument(
@@ -111,8 +111,8 @@ async def main_async():
         sys.exit(1)
 
     # Determine date range
-    start_date = args.start_date if args.start_date else datetime.now() - timedelta(days=1)
-    end_date = args.end_date if args.end_date else datetime.now()
+    start_date = args.start_date if args.start_date else datetime.now()
+    end_date = args.end_date if args.end_date else datetime.now() + timedelta(days=1)
 
     # Ensure start_date is at beginning of day
     start_date = start_date.replace(hour=0, minute=0, second=0, microsecond=0)

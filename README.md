@@ -66,7 +66,7 @@ OUTPUT_TELEGRAM_CHANNEL=@your_channel
 
 ### Basic Usage
 
-Create a digest for yesterday:
+Create a digest for today:
 ```bash
 python -m src.main
 ```
