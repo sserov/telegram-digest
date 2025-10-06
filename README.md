@@ -9,12 +9,14 @@ This project collects posts from specified Telegram channels over a defined peri
 ## Features
 
 - 📥 Collect posts from multiple Telegram channels
-- 📅 Filter posts by date (can specify a date range)
+- � Support for Telegram folder invite links (automatic channel expansion)
+- �📅 Filter posts by date (can specify a date range)
 - 🤖 Generate structured digests using Cerebras AI
 - 📊 Automatic grouping by categories with importance-based sorting
 - 💾 Save digest to text file
 - 📤 Send digest to Telegram via Bot API (HTML formatting)
 - 🔄 Map-reduce processing for large data volumes
+- ⏰ Automated daily generation via cron/scheduler
 
 ## Requirements
 
@@ -164,6 +166,45 @@ Note: Digest is formatted using HTML markup (bold, links, blockquotes).
 ```bash
 python -m src.main --help
 ```
+
+## Automated Daily Generation
+
+You can set up automatic daily digest generation using cron:
+
+### Quick Setup
+
+1. Create your script from the example:
+   ```bash
+   cp run_digest.sh.example run_digest.sh
+   ```
+
+2. Edit `run_digest.sh` and update the `PROJECT_DIR` variable:
+   ```bash
+   PROJECT_DIR="/Users/yourusername/path/to/telegram-digest"
+   ```
+
+3. Make executable and test:
+   ```bash
+   chmod +x run_digest.sh
+   ./run_digest.sh
+   ```
+
+4. Set up daily execution at 22:00 (10 PM):
+   ```bash
+   (crontab -l 2>/dev/null; echo "0 22 * * * /path/to/telegram-digest/run_digest.sh >> /path/to/telegram-digest/cron.log 2>&1") | crontab -
+   ```
+
+5. Verify cron job:
+   ```bash
+   crontab -l
+   ```
+
+6. Check logs:
+   ```bash
+   tail -f cron.log
+   ```
+
+For detailed setup instructions, troubleshooting, and alternative schedules, see [CRON_SETUP.md](CRON_SETUP.md).
 
 ## Configuration
 

@@ -146,5 +146,11 @@ cython_debug/
 digest_*.txt
 output/
 
+# Cron logs
+cron.log
+
+# User-specific scripts
+run_digest.sh
+
 # Other
 PROJECT_STATUS.md
