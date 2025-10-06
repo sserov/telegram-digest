@@ -62,13 +62,47 @@ TELEGRAM_BOT_TOKEN=your_bot_token
 OUTPUT_TELEGRAM_CHANNEL=@your_channel
 ```
 
+6. **(Recommended)** Create `channels.yaml` from example:
+```bash
+cp channels.yaml.example channels.yaml
+```
+
+Edit `channels.yaml` with your channels:
+```yaml
+channels:
+  - "@ai_news"
+  - "@ml_research"
+  - "@your_channel"
+
+groups:
+  news:
+    - "@ai_news"
+    - "@tech_digest"
+  
+  research:
+    - "@ml_research"
+    - "@arxiv_daily"
+```
+
 ## Usage
 
-### Basic Usage
+### Basic Usage (with channels.yaml)
 
-Create a digest for today:
+Create a digest for today using channels from config:
 ```bash
 python -m src.main
+```
+
+### Use Specific Channel Group
+
+```bash
+python -m src.main --group research
+```
+
+### Override with CLI Arguments
+
+```bash
+python -m src.main --channels @ai_news @ml_research @deeplearning
 ```
 
 ### Specify Channels and Dates
@@ -78,6 +112,12 @@ python -m src.main \
   --channels @ai_news @ml_research @deeplearning \
   --start-date 2025-10-01 \
   --end-date 2025-10-03
+```
+
+### Use Custom Config File
+
+```bash
+python -m src.main --config my_channels.yaml --group news
 ```
 
 ### Save to File
@@ -92,7 +132,6 @@ python -m src.main \
 
 ```bash
 python -m src.main \
-  --channels @ai_news @ml_research \
   --send-to-telegram \
   --telegram-target @my_digest_channel
 ```

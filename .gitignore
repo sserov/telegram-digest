@@ -111,6 +111,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# Configuration files with sensitive data
+channels.yaml
+
 # Spyder project settings
 .spyderproject
 .spyproject

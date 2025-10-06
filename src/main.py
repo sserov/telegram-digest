@@ -29,17 +29,26 @@ def parse_args() -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Generate digest for today from configured channels
+  # Generate digest for today using channels.yaml
   python -m src.main
+
+  # Use specific channel group from config
+  python -m src.main --group research
+
+  # Override with specific channels
+  python -m src.main --channels @ai_news @ml_research
 
   # Specify channels and date range
   python -m src.main --channels @ai_news @ml_research --start-date 2025-10-01 --end-date 2025-10-03
 
+  # Use custom config file
+  python -m src.main --config my_channels.yaml --group news
+
   # Save to file
-  python -m src.main --channels @ai_news --output-file my_digest.txt
+  python -m src.main --output-file my_digest.txt
 
   # Send to Telegram
-  python -m src.main --channels @ai_news --send-to-telegram --telegram-target @my_channel
+  python -m src.main --send-to-telegram --telegram-target @my_channel
 
 Environment variables (set in .env file):
   TELEGRAM_API_ID, TELEGRAM_API_HASH, CEREBRAS_API_KEY (required)
@@ -51,6 +60,19 @@ Environment variables (set in .env file):
         "--channels",
         nargs="+",
         help="Telegram channels to fetch from (e.g., @channel1 @channel2)",
+    )
+
+    parser.add_argument(
+        "--config",
+        type=str,
+        default="channels.yaml",
+        help="Path to YAML configuration file with channels (default: channels.yaml)",
+    )
+
+    parser.add_argument(
+        "--group",
+        type=str,
+        help="Load specific channel group from config file",
     )
 
     parser.add_argument(
@@ -103,11 +125,41 @@ async def main_async():
     # Parse arguments
     args = parse_args()
 
-    # Determine channels
-    channels = args.channels if args.channels else Config.DEFAULT_CHANNELS
+    # Determine channels with priority: CLI args > YAML config > env
+    channels = None
+    
+    if args.channels:
+        # Priority 1: CLI arguments
+        channels = args.channels
+    else:
+        # Priority 2: Try to load from YAML config
+        try:
+            channels = Config.get_channels_from_config(
+                config_path=args.config,
+                group=args.group
+            )
+            config_source = f"config file '{args.config}'"
+            if args.group:
+                config_source += f" (group: {args.group})"
+            print(f"📋 Loaded channels from {config_source}")
+        except FileNotFoundError:
+            # Config file not found, try env default
+            if Config.DEFAULT_CHANNELS:
+                channels = Config.DEFAULT_CHANNELS
+            else:
+                pass  # Will show error below
+        except Exception as e:
+            print(f"⚠️  Warning: Could not load config file: {e}")
+            # Try env default
+            if Config.DEFAULT_CHANNELS:
+                channels = Config.DEFAULT_CHANNELS
+    
     if not channels:
         print("❌ Error: No channels specified.")
-        print("   Use --channels @channel1 @channel2 or set DEFAULT_CHANNELS in config")
+        print("   Options:")
+        print("   1. Use --channels @channel1 @channel2")
+        print("   2. Create channels.yaml (see channels.yaml.example)")
+        print("   3. Set DEFAULT_CHANNELS in config")
         sys.exit(1)
 
     # Determine date range

@@ -1,0 +1,55 @@
+# Configuration file for Telegram channels
+# Copy this file to channels.yaml and customize
+
+# List of Telegram channels to fetch posts from
+# Use @ for public channels (e.g., @ai_news)
+# Use channel ID for private channels (e.g., -1001234567890)
+
+channels:
+  # ML/AI News and Research
+  - "@ai_news"
+  - "@ml_research" 
+  - "@data_secrets"
+  - "@deep_school"
+  - "@seeallochnaya"
+  
+  # Add more channels here
+  # - "@your_channel"
+  # - "@another_channel"
+
+# Optional: Define channel groups for better organization
+# When using groups, you can specify which group to use via --group argument
+groups:
+  news:
+    - "@ai_news"
+    - "@ml_news"
+    - "@tech_digest"
+  
+  research:
+    - "@ml_research"
+    - "@arxiv_daily"
+    - "@papers_with_code"
+  
+  education:
+    - "@deep_school"
+    - "@ml_tutorials"
+    - "@data_science_101"
+  
+  russian:
+    - "@data_secrets"
+    - "@seeallochnaya"
+    - "@ai_news_ru"
+
+# Optional: Default settings (can be overridden via CLI)
+defaults:
+  # Output file template (use {date} placeholder)
+  # output_file: "digest_{date}.txt"
+  
+  # Telegram target for sending
+  # telegram_target: "@my_digest_channel"
+  
+  # Whether to send to Telegram by default
+  # send_to_telegram: false
+  
+  # Whether to use bot for sending
+  # use_bot: false

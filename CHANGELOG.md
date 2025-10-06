@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-10-06
+
+### Added
+- **YAML configuration for channels** (`channels.yaml`)
+- Support for channel groups (e.g., news, research, education)
+- `--config` CLI argument to specify custom config file
+- `--group` CLI argument to load specific channel group
+- Configuration priority: CLI args > YAML config > environment variables
+- `channels.yaml.example` with documented structure
+- PyYAML dependency for config parsing
+
+### Changed
+- Channel loading now supports three sources with priority order
+- Improved CLI help with YAML configuration examples
+- Updated README with YAML configuration instructions
+
+### Improved
+- More flexible channel management
+- Better organization for multiple channel sets
+- Easier onboarding with example config file
+
 ## [0.2.0] - 2025-10-06
 
 ### Added
