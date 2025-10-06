@@ -149,27 +149,25 @@ For each category you identified:
 
 **[Emoji] [Category Name in same language as posts]**
 
-📝 Brief summary (2-4 sentences) of key points in this category.
+📝 Brief comprehensive summary (2-4 sentences) that covers ALL key points from posts in this category. The summary should be detailed enough that readers understand the essence without reading individual posts.
 
-1. Post title without hyperlink — Brief description
-   [Source channel name](post_url)
-   
-2. Post title without hyperlink — Brief description  
-   [Source channel name](post_url)
+[Source channel name](post_url)
+[Source channel name](post_url)
+[Source channel name](post_url)
 
-(Repeat for all posts in category)
+(List only Telegram post links, one per line. If multiple posts from same channel on same topic, repeat channel name with different URLs)
 
 [Next category without separator...]
 
 Rules:
 - Use **bold** for digest title and category names
 - Use 📝 emoji before category summary (without asterisks, just plain text)
-- Post titles should be plain text in numbered lists (NO hyperlinks in titles)
-- Each post must have source link at the end: [Channel name](url)
-- If multiple sources for one post, list all links: [Channel1](url1), [Channel2](url2)
-- Use numbered lists (1., 2., 3.) for posts within each category
+- Summary MUST be comprehensive and cover all important points from the category
+- After summary, list ONLY channel links (no post titles, no descriptions, no numbering)
+- Format: [Channel name](telegram_post_url) - one link per line
+- Include ONLY Telegram post links (t.me/...), exclude any external links (twitter, arxiv, github, etc.)
+- If same channel has multiple relevant posts, repeat channel name with different post URLs
 - Use line breaks for readability between categories (no separators)
-- Keep it concise and scannable
 - Categories should emerge from content, not be forced
 - Category names in the same language as post content"""
 
@@ -189,10 +187,11 @@ Rules:
 
 IMPORTANT: Format for Telegram using Markdown:
 - Category names in the SAME LANGUAGE as posts
-- Post titles as PLAIN TEXT (NO hyperlinks in titles)
-- Category summary with 📝 emoji (plain text, no asterisks)
-- Source links at the END of each post: [Channel name](url)
-- If multiple sources, list all: [Channel1](url1), [Channel2](url2)
+- After category name: comprehensive 📝 summary covering ALL key points (plain text, no asterisks)
+- After summary: list of channel links ONLY (no titles, no descriptions, no numbering)
+- Format: [Channel name](telegram_post_url) on separate lines
+- ONLY Telegram links (t.me/...), exclude external links (twitter, arxiv, github, etc.)
+- If same channel has multiple posts on topic, repeat channel name with different URLs
 - No separators between categories"""
 
     @staticmethod
@@ -217,11 +216,11 @@ IMPORTANT: Create final digest using Telegram Markdown format:
 - Category names in the SAME LANGUAGE as post content
 - Use appropriate emojis for each category based on its theme
 - Use **bold** for digest title and category names
-- Post titles as PLAIN TEXT (NO hyperlinks in titles)
-- Category summary with 📝 emoji (plain text without asterisks)
-- Source links at the END of each post: [Channel name](url)
-- If post has multiple sources, list all links: [Channel1](url1), [Channel2](url2)
-- Use numbered lists (1., 2., 3.) for posts within each category
+- After category: comprehensive 📝 summary covering ALL key points (plain text, no asterisks)
+- After summary: list ONLY channel links (no post titles, no descriptions, no numbering)
+- Format: [Channel name](telegram_post_url) on separate lines
+- Include ONLY Telegram post links (t.me/...), exclude external links (twitter, arxiv, github, etc.)
+- If same channel has multiple posts, repeat channel name with different URLs
 - Use line breaks between categories (NO separators like ━━━━)
 - Categories should reflect the actual content, not predetermined templates"""
 
