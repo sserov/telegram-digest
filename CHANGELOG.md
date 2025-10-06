@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **BREAKING**: Removed hardcoded categories (Research, Tools, News, Tutorials, Other)
+- **Default date range**: Now defaults to "today" instead of "yesterday"
 - System prompts now emphasize content-based categorization
 - Reduce phase intelligently merges similar topics across chunks
 - Categories now adapt to actual content rather than forcing predefined templates
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Better relevance of digest organization
 - More flexible handling of diverse content themes
 - Enhanced readability with dynamic category names
+- More intuitive default behavior (today's posts instead of yesterday's)
 
 ## [0.1.1] - 2025-10-05
 
