@@ -4,6 +4,8 @@
 # List of Telegram channels to fetch posts from
 # Use @ for public channels (e.g., @ai_news)
 # Use channel ID for private channels (e.g., -1001234567890)
+# You can also use Telegram folder invite links (e.g., https://t.me/addlist/SLUG)
+# Folder links will be automatically expanded to include all channels in that folder
 
 channels:
   # ML/AI News and Research
@@ -13,17 +15,27 @@ channels:
   - "@deep_school"
   - "@seeallochnaya"
   
+  # Or use a folder link to automatically include all channels from a folder
+  # - "https://t.me/addlist/Wv30yLzHEuw4YTky"
+  
+  # You can mix regular channels and folder links
+  # - "@my_channel"
+  # - "https://t.me/addlist/AnotherFolderSlug"
+  
   # Add more channels here
   # - "@your_channel"
   # - "@another_channel"
 
 # Optional: Define channel groups for better organization
 # When using groups, you can specify which group to use via --group argument
+# Groups also support folder links
 groups:
   news:
     - "@ai_news"
     - "@ml_news"
     - "@tech_digest"
+    # Folder links work in groups too
+    # - "https://t.me/addlist/NewsChannelsFolder"
   
   research:
     - "@ml_research"

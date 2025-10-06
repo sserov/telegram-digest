@@ -74,16 +74,22 @@ channels:
   - "@ai_news"
   - "@ml_research"
   - "@your_channel"
+  # Or use Telegram folder invite links
+  - "https://t.me/addlist/YourFolderSlug"
 
 groups:
   news:
     - "@ai_news"
     - "@tech_digest"
+    # Folder links work in groups too
+    - "https://t.me/addlist/NewsChannelsFolder"
   
   research:
     - "@ml_research"
     - "@arxiv_daily"
 ```
+
+**Note:** You can use Telegram folder invite links (e.g., `https://t.me/addlist/Wv30yLzHEuw4YTky`) to automatically include all channels from a shared folder. This is useful for managing large channel collections.
 
 ## Usage
 
@@ -104,6 +110,18 @@ python -m src.main --group research
 
 ```bash
 python -m src.main --channels @ai_news @ml_research @deeplearning
+```
+
+You can also use folder links directly in CLI:
+
+```bash
+python -m src.main --channels "https://t.me/addlist/Wv30yLzHEuw4YTky"
+```
+
+Or mix channels and folder links:
+
+```bash
+python -m src.main --channels @ai_news "https://t.me/addlist/FolderSlug" @ml_research
 ```
 
 ### Specify Channels and Dates
