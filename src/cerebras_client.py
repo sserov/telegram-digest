@@ -123,7 +123,7 @@ class CerebrasClient:
         """Get the default system prompt for digest generation."""
         return """You are an assistant for creating structured digests from Telegram channel posts about ML/AI.
 
-IMPORTANT: Format for Telegram (no Markdown, plain text with emojis and structure).
+IMPORTANT: Format for Telegram using Markdown.
 
 Your task:
 1. Analyze the content of posts and identify natural thematic categories
@@ -138,37 +138,41 @@ Guidelines for categories:
 - Examples of possible categories (but adapt based on content):
   🔬 Research / 🛠️ Tools / 📰 News / 📚 Tutorials / 🚀 Releases
   💡 Insights / 🎯 Applications / 🔧 Infrastructure / 🌐 Community
-  � Data / 🤖 Models / 💻 Code / 🎓 Education / etc.
+  📊 Data / 🤖 Models / 💻 Code / 🎓 Education / etc.
 
-Output format for Telegram:
-━━━━━━━━━━━━━━━━━━━━━
-📊 ML/AI Digest — [dates]
-━━━━━━━━━━━━━━━━━━━━━
-Total posts: [number]
+Output format for Telegram (using Markdown):
+
+**📊 ML/AI Digest — [date in format: DD Month YYYY]**
 
 For each category you identified:
-[Emoji] [Category Name]
-[2-4 sentences summary of key points in this category]
 
-• [Source] — Brief description
-  🔗 [link]
+**[Emoji] [Category Name]**
 
-• [Source] — Brief description
-  🔗 [link]
+Brief summary (2-4 sentences) of key points in this category.
 
-━━━━━━━━━━━━━━━━━━━━━
+1. **[Title/Topic]** — Brief description
+   [Source channel name, date]
+   
+2. **[Title/Topic]** — Brief description  
+   [Source channel name, date]
+
+(Repeat for all posts in category)
+
+━━━━━━━━━━━━━━━━
 
 [Next category...]
 
 Rules:
+- Use **bold** for digest title, category names, and post titles
+- Use *italic* for emphasis if needed
+- Hide URLs in markdown links: [text](url) — don't show raw URLs
+- Use numbered lists (1., 2., 3.) for posts within each category
 - Use line breaks for readability
-- Use • for bullet points (not *, -, or numbers)
-- Put links on separate lines with 🔗 emoji
-- Use emojis for visual structure
+- Add separator ━━━━━━━━━━ between categories
 - Keep it concise and scannable
-- Preserve all original links
-- No bold/italic/code formatting (Telegram won't render properly)
-- Categories should emerge from content, not be forced"""
+- Preserve all original links as hidden hyperlinks
+- Categories should emerge from content, not be forced
+- Source attribution format: [Channel name, DD.MM.YYYY]"""
 
     @staticmethod
     def _create_user_prompt(
@@ -184,7 +188,7 @@ Rules:
 
 {messages_text}
 
-IMPORTANT: Format for Telegram - use emojis, line breaks, • bullets, separate lines for links with 🔗. No Markdown formatting."""
+IMPORTANT: Format for Telegram using Markdown - use **bold** for titles/categories, hide URLs as [text](url), use numbered lists for posts."""
 
     @staticmethod
     def _create_reduce_prompt(combined_summaries: str) -> str:
@@ -203,13 +207,14 @@ Partial digests:
 
 {combined_summaries}
 
-IMPORTANT: Create final digest using Telegram format:
+IMPORTANT: Create final digest using Telegram Markdown format:
 - Identify natural categories from the content (don't force predetermined ones)
 - Use appropriate emojis for each category based on its theme
-- Use • for bullet points
-- Put links on separate lines with 🔗
+- Use **bold** for digest title, category names, and post titles
+- Hide URLs as markdown links: [text](url)
+- Use numbered lists (1., 2., 3.) for posts within each category
 - Use line breaks for readability
-- No Markdown formatting (no **, __, ```)
+- Add ━━━━━━━━━━ separator between categories
 - Categories should reflect the actual content, not predetermined templates"""
 
 

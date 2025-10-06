@@ -50,10 +50,8 @@ class DigestGenerator:
             chunks = self._split_into_chunks(messages_text)
             digest = self.cerebras.generate_digest_map_reduce(chunks)
 
-        # Add header with date range
-        header = self._generate_header(start_date, end_date, len(messages))
-
-        return header + "\n\n" + digest
+        # LLM now generates the digest with header included
+        return digest
 
     def _format_messages(self, messages: List[TelegramMessage]) -> str:
         """Format messages for LLM processing."""
@@ -94,26 +92,14 @@ class DigestGenerator:
         return chunks
 
     @staticmethod
-    def _generate_header(start_date: datetime, end_date: datetime, message_count: int) -> str:
-        """Generate digest header."""
-        # Format dates
-        if start_date.date() == (end_date - timedelta(days=1)).date():
-            date_str = start_date.strftime("%d.%m.%Y")
-        else:
-            date_str = f"{start_date.strftime('%d.%m.%Y')} - {(end_date - timedelta(days=1)).strftime('%d.%m.%Y')}"
-
-        return f"📊 ML/AI Digest — {date_str}\n{'=' * 50}\nTotal posts: {message_count}"
-
-    @staticmethod
     def _generate_empty_digest(start_date: datetime, end_date: datetime) -> str:
         """Generate digest for when no messages found."""
         if start_date.date() == (end_date - timedelta(days=1)).date():
-            date_str = start_date.strftime("%d.%m.%Y")
+            date_str = start_date.strftime("%d %B %Y")
         else:
-            date_str = f"{start_date.strftime('%d.%m.%Y')} - {(end_date - timedelta(days=1)).strftime('%d.%m.%Y')}"
+            date_str = f"{start_date.strftime('%d %B')} - {(end_date - timedelta(days=1)).strftime('%d %B %Y')}"
 
-        return f"""📊 ML/AI Digest — {date_str}
-{'=' * 50}
+        return f"""**📊 ML/AI Digest — {date_str}**
 
 ❌ No messages found for the specified period.
 
