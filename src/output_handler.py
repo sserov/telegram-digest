@@ -99,7 +99,7 @@ class OutputHandler:
 
         try:
             await bot_client.start(bot_token=Config.TELEGRAM_BOT_TOKEN)
-            await bot_client.send_message(target, digest, parse_mode='md')
+            await bot_client.send_message(target, digest, parse_mode='MarkdownV2')
             print(f"✅ Digest sent to {target} via bot")
             return True
 
@@ -128,7 +128,7 @@ class OutputHandler:
             should_disconnect = True
 
         try:
-            await client.send_message(target, digest, parse_mode='md')
+            await client.send_message(target, digest, parse_mode='MarkdownV2')
             print(f"✅ Digest sent to {target}")
             return True
 
