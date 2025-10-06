@@ -162,7 +162,7 @@ For each category you identified:
 [Next category without separator...]
 
 Rules:
-- Use **bold** for digest title and category names
+- Use **bold** for digest title and **bold** for category names (including emoji)
 - Use 📝 emoji before short summary (1-2 sentences, plain text)
 - Add detailed summary in quote format: >text (this creates expandable block quote in Telegram)
 - After summaries, list channel links normally: [Channel name](url)

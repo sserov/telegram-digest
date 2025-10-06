@@ -164,7 +164,7 @@ class OutputHandler:
             "chat_id": target,
             "text": escaped_text,
             "parse_mode": "MarkdownV2",
-            "disable_web_page_preview": False  # Allow link previews
+            "disable_web_page_preview": True  # Disable link previews
         }
         
         try:
