@@ -67,12 +67,80 @@ class OutputHandler:
             else:
                 result.append(char)
             
+    @staticmethod
+    def escape_markdown_v2(text: str) -> str:
+        """
+        Escape special characters for MarkdownV2 format.
+        
+        In MarkdownV2, these characters must be escaped outside of formatting:
+        _ * [ ] ( ) ~ ` > # + - = | { } . !
+        
+        We preserve markdown syntax like **bold**, [text](url), and > quotes.
+        """
+        # Don't escape content inside [text](url) patterns
+        def escape_outside_links(text):
+            result = []
+            i = 0
+            while i < len(text):
+                # Check for [text](url) pattern
+                if text[i] == '[':
+                    bracket_end = text.find('](', i)
+                    if bracket_end != -1:
+                        paren_end = text.find(')', bracket_end + 2)
+                        if paren_end != -1:
+                            # This is a link, keep as is
+                            result.append(text[i:paren_end + 1])
+                            i = paren_end + 1
+                            continue
+                result.append(text[i])
+                i += 1
+            return ''.join(result)
+        
+        # Characters that need escaping (except those in links)
+        special_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
+        
+        escaped = escape_outside_links(text)
+        
+        # Now escape special characters, but preserve **bold** and > at line start
+        result = []
+        i = 0
+        while i < len(escaped):
+            char = escaped[i]
+            
+            # Preserve **bold**
+            if char == '*' and i + 1 < len(escaped) and escaped[i + 1] == '*':
+                result.append('**')
+                i += 2
+                continue
+            
+            # Preserve > at start of line (quotes)
+            if char == '>' and (i == 0 or escaped[i - 1] == '\n'):
+                result.append('>')
+                i += 1
+                continue
+            
+            # Preserve links [text](url) - already handled above
+            if char == '[':
+                bracket_end = escaped.find('](', i)
+                if bracket_end != -1:
+                    paren_end = escaped.find(')', bracket_end + 2)
+                    if paren_end != -1:
+                        result.append(escaped[i:paren_end + 1])
+                        i = paren_end + 1
+                        continue
+            
+            # Escape special characters
+            if char in special_chars:
+                result.append('\\' + char)
+            else:
+                result.append(char)
+            
             i += 1
         
         return ''.join(result)
 
     @staticmethod
-    async def send_via_bot_api(digest: str, target: str) -> bool:
+    def send_via_bot_api(digest: str, target: str) -> bool:  # NOT async
         """
         Send message via Telegram Bot API (recommended for MarkdownV2).
         
@@ -108,11 +176,17 @@ class OutputHandler:
                 print(f"✅ Digest sent to {target} via Bot API")
                 return True
             else:
-                print(f"❌ Bot API error: {result.get('description', 'Unknown error')}")
+                error_desc = result.get('description', 'Unknown error')
+                print(f"❌ Bot API error: {error_desc}")
+                # Print escaped text for debugging
+                if "can't parse" in error_desc.lower():
+                    print(f"Debug: First 500 chars of escaped text:")
+                    print(escaped_text[:500])
                 return False
                 
         except requests.exceptions.RequestException as e:
             print(f"❌ Failed to send via Bot API: {e}")
+            return False
             return False
 
     @staticmethod
@@ -175,18 +249,14 @@ class OutputHandler:
         if len(digest) > 4000:
             print("⚠️  Digest is too long for a single Telegram message.")
             print("   Splitting into multiple messages...")
-            return await OutputHandler._send_long_message_bot_api(digest, target)
+            return OutputHandler._send_long_message_bot_api_sync(digest, target)
 
         try:
             if use_bot:
                 # Use Bot API (recommended for MarkdownV2)
-                return await OutputHandler.send_via_bot_api(digest, target)
+                return OutputHandler.send_via_bot_api(digest, target)
             else:
                 # Fallback to Telethon user client
-                return await OutputHandler._send_via_user_client(digest, target, client)
-            if use_bot:
-                return await OutputHandler._send_via_bot(digest, target)
-            else:
                 return await OutputHandler._send_via_user_client(digest, target, client)
 
         except Exception as e:
@@ -248,7 +318,7 @@ class OutputHandler:
                 await client.disconnect()
 
     @staticmethod
-    async def _send_long_message_bot_api(digest: str, target: str) -> bool:
+    def _send_long_message_bot_api_sync(digest: str, target: str) -> bool:  # NOT async
         """
         Handle sending of long messages by splitting (Bot API version).
         
@@ -258,6 +328,7 @@ class OutputHandler:
             
         Returns:
             True if all parts sent successfully
+        """
         """
         max_length = 4000
         parts = []
@@ -283,7 +354,7 @@ class OutputHandler:
         for i, part in enumerate(parts, 1):
             part_with_header = f"**\\[Part {i}/{len(parts)}\\]**\n\n{part}"
             
-            result = await OutputHandler.send_via_bot_api(part_with_header, target)
+            result = OutputHandler.send_via_bot_api(part_with_header, target)  # NOT await
             
             if not result:
                 success = False
