@@ -149,24 +149,27 @@ For each category you identified:
 
 **[Emoji] [Category Name in same language as posts]**
 
-📝 Brief comprehensive summary (2-4 sentences) that covers ALL key points from posts in this category. The summary should be detailed enough that readers understand the essence without reading individual posts.
+📝 Brief summary (1-2 sentences) highlighting the main point.
 
-[Source channel name](post_url)
-[Source channel name](post_url)
-[Source channel name](post_url)
+**>** Detailed expandable summary (2-4 sentences) with comprehensive coverage of all key points. This gives readers full context if they want to dive deeper.
 
-(List only Telegram post links, one per line. If multiple posts from same channel on same topic, repeat channel name with different URLs)
+||​||||[Source channel name](post_url)
+||​||||[Source channel name](post_url)
+||​||||[Source channel name](post_url)
+
+(List only Telegram post links, one per line. Spoiler formatting ||​|||| prevents link preview. If multiple posts from same channel, repeat channel name with different URLs)
 
 [Next category without separator...]
 
 Rules:
 - Use **bold** for digest title and category names
-- Use 📝 emoji before category summary (without asterisks, just plain text)
-- Summary MUST be comprehensive and cover all important points from the category
-- After summary, list ONLY channel links (no post titles, no descriptions, no numbering)
-- Format: [Channel name](telegram_post_url) - one link per line
-- Include ONLY Telegram post links (t.me/...), exclude any external links (twitter, arxiv, github, etc.)
-- If same channel has multiple relevant posts, repeat channel name with different post URLs
+- Use 📝 emoji before short summary (1-2 sentences, plain text)
+- Add **>** before detailed expandable quote (2-4 sentences with comprehensive info)
+- After summaries, list ONLY channel links with spoiler: ||​||||[Channel name](url)
+- Spoiler syntax ||​|||| around links prevents Telegram from showing preview cards
+- Format: ||​||||[Channel name](telegram_post_url) - one link per line
+- Include ONLY Telegram post links (t.me/...), exclude external links (twitter, arxiv, github, etc.)
+- If same channel has multiple posts, repeat channel name with different URLs
 - Use line breaks for readability between categories (no separators)
 - Categories should emerge from content, not be forced
 - Category names in the same language as post content"""
@@ -187,11 +190,13 @@ Rules:
 
 IMPORTANT: Format for Telegram using Markdown:
 - Category names in the SAME LANGUAGE as posts
-- After category name: comprehensive 📝 summary covering ALL key points (plain text, no asterisks)
-- After summary: list of channel links ONLY (no titles, no descriptions, no numbering)
-- Format: [Channel name](telegram_post_url) on separate lines
+- After category: short 📝 summary (1-2 sentences, main point only)
+- Then: **>** detailed expandable quote (2-4 sentences, comprehensive info)
+- After summaries: list channel links with spoiler format: ||​||||[Channel name](url)
+- Spoiler ||​|||| prevents link preview rendering in Telegram
+- Format: ||​||||[Channel name](telegram_post_url) on separate lines
 - ONLY Telegram links (t.me/...), exclude external links (twitter, arxiv, github, etc.)
-- If same channel has multiple posts on topic, repeat channel name with different URLs
+- If same channel has multiple posts, repeat channel name with different URLs
 - No separators between categories"""
 
     @staticmethod
@@ -216,9 +221,11 @@ IMPORTANT: Create final digest using Telegram Markdown format:
 - Category names in the SAME LANGUAGE as post content
 - Use appropriate emojis for each category based on its theme
 - Use **bold** for digest title and category names
-- After category: comprehensive 📝 summary covering ALL key points (plain text, no asterisks)
-- After summary: list ONLY channel links (no post titles, no descriptions, no numbering)
-- Format: [Channel name](telegram_post_url) on separate lines
+- After category: short 📝 summary (1-2 sentences, main point only)
+- Then: **>** detailed expandable quote (2-4 sentences, comprehensive coverage)
+- After summaries: list channel links with spoiler: ||​||||[Channel name](url)
+- Spoiler ||​|||| prevents Telegram from showing link preview cards
+- Format: ||​||||[Channel name](telegram_post_url) on separate lines
 - Include ONLY Telegram post links (t.me/...), exclude external links (twitter, arxiv, github, etc.)
 - If same channel has multiple posts, repeat channel name with different URLs
 - Use line breaks between categories (NO separators like ━━━━)
