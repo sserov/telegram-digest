@@ -169,7 +169,6 @@ class OutputHandler:
         
         try:
             response = requests.post(url, json=payload, timeout=30)
-            response.raise_for_status()
             
             result = response.json()
             if result.get("ok"):
@@ -178,12 +177,18 @@ class OutputHandler:
             else:
                 error_desc = result.get('description', 'Unknown error')
                 print(f"❌ Bot API error: {error_desc}")
-                # Print escaped text for debugging
-                if "can't parse" in error_desc.lower():
-                    print(f"Debug: First 500 chars of escaped text:")
-                    print(escaped_text[:500])
+                # Print first 500 chars of escaped text for debugging
+                print(f"Debug: First 500 chars of escaped text:")
+                print(escaped_text[:500])
+                print(f"Debug: Last 200 chars:")
+                print(escaped_text[-200:])
                 return False
                 
+        except requests.exceptions.HTTPError as e:
+            print(f"❌ HTTP Error: {e}")
+            if hasattr(e, 'response') and e.response is not None:
+                print(f"Response: {e.response.text[:500]}")
+            return False
         except requests.exceptions.RequestException as e:
             print(f"❌ Failed to send via Bot API: {e}")
             return False
@@ -328,7 +333,6 @@ class OutputHandler:
             
         Returns:
             True if all parts sent successfully
-        """
         """
         max_length = 4000
         parts = []
