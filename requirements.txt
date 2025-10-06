@@ -1,0 +1,7 @@
+# Core dependencies
+telethon>=1.35.0
+python-dotenv>=1.0.0
+cerebras-cloud-sdk>=1.0.0
+
+# Utilities
+python-dateutil>=2.8.2
