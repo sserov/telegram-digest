@@ -17,103 +17,65 @@ class OutputHandler:
     """Handles output of generated digests."""
 
     @staticmethod
-    def escape_markdown_v2(text: str) -> str:
+    def markdown_to_html(text: str) -> str:
         """
-        Escape special characters for MarkdownV2 format.
+        Convert Markdown formatting to HTML for Telegram Bot API.
         
-        In MarkdownV2, these characters must be escaped: _ * [ ] ( ) ~ ` > # + - = | { } . !
-        But we need to preserve formatting characters that are already part of markdown syntax.
+        Converts:
+        - **bold** -> <b>bold</b>
+        - [text](url) -> <a href="url">text</a>
+        - >quote -> <blockquote>quote</blockquote>
+        
+        HTML only requires escaping: & < >
         """
-        # Characters that need escaping in MarkdownV2
-        # We'll be smart about it - don't escape if it's part of valid markdown
-        escape_chars = r'_*[]()~`>#+-=|{}.!'
-        
-        # This is a simplified approach - escape all special chars except in markdown constructs
-        # For production, you might want more sophisticated parsing
-        result = []
-        i = 0
-        while i < len(text):
-            char = text[i]
-            
-            # Check if we're in a markdown bold (**text**)
-            if char == '*' and i + 1 < len(text) and text[i + 1] == '*':
-                # This is bold markdown, keep it
-                result.append('**')
-                i += 2
-                continue
-            
-            # Check if we're in a link [text](url)
-            if char == '[':
-                # Find the closing ] and following (url)
-                close_bracket = text.find(']', i)
-                if close_bracket != -1 and close_bracket + 1 < len(text) and text[close_bracket + 1] == '(':
-                    close_paren = text.find(')', close_bracket)
-                    if close_paren != -1:
-                        # This is a valid link, keep it as is
-                        result.append(text[i:close_paren + 1])
-                        i = close_paren + 1
-                        continue
-            
-            # Check if we're at the start of a line with > (quote)
-            if char == '>' and (i == 0 or text[i - 1] == '\n'):
-                # This is a quote marker, keep it
-                result.append('>')
-                i += 1
-                continue
-            
-            # Check if this is a special character that needs escaping
-            if char in escape_chars:
-                result.append('\\' + char)
-            else:
-                result.append(char)
-            
-    @staticmethod
-    def escape_markdown_v2(text: str) -> str:
-        """
-        Escape special characters for MarkdownV2 format.
-        
-        In MarkdownV2, these characters must be escaped outside of formatting:
-        _ * [ ] ( ) ~ ` > # + - = | { } . !
-        
-        We preserve markdown syntax like **bold**, [text](url), and > quotes.
-        """
-        # Characters that need escaping
-        special_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
+        import html
         
         result = []
         i = 0
         
         while i < len(text):
-            # Preserve **bold** (two asterisks)
+            # Handle **bold**
             if i < len(text) - 1 and text[i:i+2] == '**':
-                # Find closing **
                 close_pos = text.find('**', i + 2)
                 if close_pos != -1:
-                    # Keep the entire **text** as is
-                    result.append(text[i:close_pos + 2])
+                    bold_content = text[i + 2:close_pos]
+                    # Escape HTML in content
+                    bold_content = html.escape(bold_content)
+                    result.append(f'<b>{bold_content}</b>')
                     i = close_pos + 2
                     continue
             
-            # Preserve [text](url) links
+            # Handle [text](url)
             if text[i] == '[':
                 bracket_end = text.find('](', i)
                 if bracket_end != -1:
                     paren_end = text.find(')', bracket_end + 2)
                     if paren_end != -1:
-                        # Keep the entire [text](url) as is
-                        result.append(text[i:paren_end + 1])
+                        link_text = text[i + 1:bracket_end]
+                        link_url = text[bracket_end + 2:paren_end]
+                        # Escape HTML in text and url
+                        link_text = html.escape(link_text)
+                        link_url = html.escape(link_url)
+                        result.append(f'<a href="{link_url}">{link_text}</a>')
                         i = paren_end + 1
                         continue
             
-            # Preserve > at start of line (block quotes)
+            # Handle >quote at start of line
             if text[i] == '>' and (i == 0 or text[i - 1] == '\n'):
-                result.append('>')
-                i += 1
+                # Find end of line
+                line_end = text.find('\n', i + 1)
+                if line_end == -1:
+                    line_end = len(text)
+                
+                quote_content = text[i + 1:line_end].strip()
+                quote_content = html.escape(quote_content)
+                result.append(f'<blockquote>{quote_content}</blockquote>')
+                i = line_end
                 continue
             
-            # Escape special characters
-            if text[i] in special_chars:
-                result.append('\\' + text[i])
+            # Regular character - escape HTML special chars
+            if text[i] in '&<>':
+                result.append(html.escape(text[i]))
             else:
                 result.append(text[i])
             
@@ -139,13 +101,13 @@ class OutputHandler:
         
         url = f"https://api.telegram.org/bot{Config.TELEGRAM_BOT_TOKEN}/sendMessage"
         
-        # Escape text for MarkdownV2
-        escaped_text = OutputHandler.escape_markdown_v2(digest)
+        # Convert Markdown to HTML
+        html_text = OutputHandler.markdown_to_html(digest)
         
         payload = {
             "chat_id": target,
-            "text": escaped_text,
-            "parse_mode": "MarkdownV2",
+            "text": html_text,
+            "parse_mode": "HTML",
             "disable_web_page_preview": True  # Disable link previews
         }
         
@@ -159,11 +121,11 @@ class OutputHandler:
             else:
                 error_desc = result.get('description', 'Unknown error')
                 print(f"❌ Bot API error: {error_desc}")
-                # Print first 500 chars of escaped text for debugging
-                print(f"Debug: First 500 chars of escaped text:")
-                print(escaped_text[:500])
+                # Print first 500 chars of HTML text for debugging
+                print(f"Debug: First 500 chars of HTML text:")
+                print(html_text[:500])
                 print(f"Debug: Last 200 chars:")
-                print(escaped_text[-200:])
+                print(html_text[-200:])
                 return False
                 
         except requests.exceptions.HTTPError as e:
@@ -210,17 +172,13 @@ class OutputHandler:
     async def send_to_telegram(
         digest: str,
         target: Optional[str] = None,
-        use_bot: bool = True,  # Changed default to True - prefer Bot API
-        client: Optional[TelegramClient] = None,
     ) -> bool:
         """
-        Send digest to Telegram channel or chat.
+        Send digest to Telegram channel or chat via Bot API.
 
         Args:
             digest: Digest text to send
             target: Target channel/chat (e.g., '@channel' or user_id). If None, uses config.
-            use_bot: Whether to use Bot API (recommended, default=True)
-            client: Existing TelegramClient (for user session). Ignored if use_bot=True.
 
         Returns:
             True if sent successfully, False otherwise
@@ -239,70 +197,12 @@ class OutputHandler:
             return OutputHandler._send_long_message_bot_api_sync(digest, target)
 
         try:
-            if use_bot:
-                # Use Bot API (recommended for MarkdownV2)
-                return OutputHandler.send_via_bot_api(digest, target)
-            else:
-                # Fallback to Telethon user client
-                return await OutputHandler._send_via_user_client(digest, target, client)
+            # Use Bot API (HTML formatting)
+            return OutputHandler.send_via_bot_api(digest, target)
 
         except Exception as e:
             print(f"❌ Failed to send to Telegram: {e}")
             return False
-
-    @staticmethod
-    async def _send_via_bot(digest: str, target: str) -> bool:
-        """Send message via bot."""
-        if not Config.TELEGRAM_BOT_TOKEN:
-            print("❌ TELEGRAM_BOT_TOKEN not configured")
-            return False
-
-        bot_client = TelegramClient(
-            "bot_session", Config.TELEGRAM_API_ID, Config.TELEGRAM_API_HASH
-        )
-
-        try:
-            await bot_client.start(bot_token=Config.TELEGRAM_BOT_TOKEN)
-            await bot_client.send_message(target, digest, parse_mode='MarkdownV2')
-            print(f"✅ Digest sent to {target} via bot")
-            return True
-
-        except Exception as e:
-            print(f"❌ Bot send error: {e}")
-            return False
-
-        finally:
-            await bot_client.disconnect()
-
-    @staticmethod
-    async def _send_via_user_client(
-        digest: str, target: str, client: Optional[TelegramClient] = None
-    ) -> bool:
-        """Send message via user client."""
-        should_disconnect = False
-
-        if client is None:
-            # Create new client
-            client = TelegramClient(
-                Config.TELEGRAM_SESSION_NAME,
-                Config.TELEGRAM_API_ID,
-                Config.TELEGRAM_API_HASH,
-            )
-            await client.start()
-            should_disconnect = True
-
-        try:
-            await client.send_message(target, digest, parse_mode='MarkdownV2')
-            print(f"✅ Digest sent to {target}")
-            return True
-
-        except Exception as e:
-            print(f"❌ Send error: {e}")
-            return False
-
-        finally:
-            if should_disconnect:
-                await client.disconnect()
 
     @staticmethod
     def _send_long_message_bot_api_sync(digest: str, target: str) -> bool:  # NOT async
@@ -338,59 +238,11 @@ class OutputHandler:
 
         success = True
         for i, part in enumerate(parts, 1):
-            part_with_header = f"**\\[Part {i}/{len(parts)}\\]**\n\n{part}"
+            # Add part header with bold formatting
+            part_with_header = f"**[Part {i}/{len(parts)}]**\n\n{part}"
             
             result = OutputHandler.send_via_bot_api(part_with_header, target)  # NOT await
             
-            if not result:
-                success = False
-                print(f"❌ Failed to send part {i}/{len(parts)}")
-                break
-
-            print(f"✅ Sent part {i}/{len(parts)}")
-
-        return success
-
-    @staticmethod
-    async def _send_long_message(
-        digest: str,
-        target: str,
-        use_bot: bool = False,
-        client: Optional[TelegramClient] = None,
-    ) -> bool:
-        """Handle sending of long messages by splitting (legacy Telethon version)."""
-        # Split by sections/paragraphs to avoid breaking mid-sentence
-        max_length = 4000
-        parts = []
-
-        # Try to split on section boundaries first
-        sections = digest.split("\n\n")
-        current_part = ""
-
-        for section in sections:
-            if len(current_part) + len(section) + 2 <= max_length:
-                current_part += section + "\n\n"
-            else:
-                if current_part:
-                    parts.append(current_part.strip())
-                current_part = section + "\n\n"
-
-        if current_part:
-            parts.append(current_part.strip())
-
-        print(f"📤 Sending digest in {len(parts)} parts...")
-
-        success = True
-        for i, part in enumerate(parts, 1):
-            part_with_header = f"[Part {i}/{len(parts)}]\n\n{part}"
-
-            if use_bot:
-                result = await OutputHandler._send_via_bot(part_with_header, target)
-            else:
-                result = await OutputHandler._send_via_user_client(
-                    part_with_header, target, client
-                )
-
             if not result:
                 success = False
                 print(f"❌ Failed to send part {i}/{len(parts)}")

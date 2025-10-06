@@ -106,12 +106,6 @@ Environment variables (set in .env file):
     )
 
     parser.add_argument(
-        "--use-bot",
-        action="store_true",
-        help="Use bot token to send (requires TELEGRAM_BOT_TOKEN)",
-    )
-
-    parser.add_argument(
         "--no-console",
         action="store_true",
         help="Don't print digest to console",
@@ -219,8 +213,6 @@ async def main_async():
                 await OutputHandler.send_to_telegram(
                     digest,
                     target=target,
-                    use_bot=args.use_bot,
-                    client=fetcher.client,
                 )
 
         print("\n" + "=" * 80)
