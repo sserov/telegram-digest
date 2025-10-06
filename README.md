@@ -66,7 +66,7 @@ OUTPUT_TELEGRAM_CHANNEL=@your_channel
 
 ### Basic Usage
 
-Create a digest for yesterday:
+Create a digest for today:
 ```bash
 python -m src.main
 ```
@@ -132,29 +132,40 @@ telegram-digest/
 
 ## Digest Format
 
-The digest is structured by categories:
+The digest is automatically structured by AI-generated categories based on the actual content of posts:
 
 ```
 📊 ML/AI Digest — October 1-3, 2025
 
-🔬 Research
+🔬 Research & Papers
 Brief summary of research news and discoveries...
-• @channel_name (2025-10-01): https://t.me/channel/123
-• @another_channel (2025-10-02): https://t.me/another/456
 
-🛠️ Tools
+• @channel_name (2025-10-01):
+🔗 https://t.me/channel/123
+
+• @another_channel (2025-10-02):
+🔗 https://t.me/another/456
+
+━━━━━━━━━━━━━━━━━━━━━
+
+🛠️ Tools & Libraries
 New tools and libraries...
-• @tools_channel (2025-10-01): https://t.me/tools/789
 
-📰 News
-Latest industry news...
+• @tools_channel (2025-10-01):
+🔗 https://t.me/tools/789
 
-📚 Tutorials
+━━━━━━━━━━━━━━━━━━━━━
+
+📰 Industry News
+Latest news and announcements...
+
+━━━━━━━━━━━━━━━━━━━━━
+
+📚 Tutorials & Education
 Educational materials and guides...
-
-💡 Other
-Other interesting materials...
 ```
+
+**Note:** Categories are not hardcoded. The AI analyzes post content and creates relevant categories dynamically (e.g., 🚀 Product Releases, 💡 Insights, 🎯 Applications, 🤖 Models, etc.).
 
 ## Getting Telegram API Credentials
 

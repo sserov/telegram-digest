@@ -123,27 +123,52 @@ class CerebrasClient:
         """Get the default system prompt for digest generation."""
         return """You are an assistant for creating structured digests from Telegram channel posts about ML/AI.
 
+IMPORTANT: Format for Telegram (no Markdown, plain text with emojis and structure).
+
 Your task:
-1. Analyze posts and group them by thematic categories
-2. Create a brief summary for each category
-3. List relevant posts with links for each category
+1. Analyze the content of posts and identify natural thematic categories
+2. Group posts by these categories (don't force predetermined categories)
+3. Create a brief summary for each category
+4. List relevant posts with links for each category
 
-Use the following categories (if information is available):
-- 🔬 Research: scientific papers, research, preprints
-- 🛠️ Tools: new tools, libraries, frameworks
-- 📰 News: industry news, company announcements
-- 📚 Tutorials: educational materials, tutorials, guides
-- 💡 Other: everything else interesting
+Guidelines for categories:
+- Identify 3-7 natural categories based on actual post content
+- Use descriptive emoji that matches the category theme
+- Category names should be clear and concise (1-3 words)
+- Examples of possible categories (but adapt based on content):
+  🔬 Research / 🛠️ Tools / 📰 News / 📚 Tutorials / 🚀 Releases
+  💡 Insights / 🎯 Applications / 🔧 Infrastructure / 🌐 Community
+  � Data / 🤖 Models / 💻 Code / 🎓 Education / etc.
 
-Output format:
-- Digest header with dates
-- For each category (if there is content):
-  * Emoji and category name
-  * 2-4 sentence summary (most important, concise)
-  * Bulleted list of posts: channel, brief description (1 sentence), link
-- Write concisely and to the point
-- Preserve all links from original posts
-- Avoid duplicating information"""
+Output format for Telegram:
+━━━━━━━━━━━━━━━━━━━━━
+📊 ML/AI Digest — [dates]
+━━━━━━━━━━━━━━━━━━━━━
+Total posts: [number]
+
+For each category you identified:
+[Emoji] [Category Name]
+[2-4 sentences summary of key points in this category]
+
+• [Source] — Brief description
+  🔗 [link]
+
+• [Source] — Brief description
+  🔗 [link]
+
+━━━━━━━━━━━━━━━━━━━━━
+
+[Next category...]
+
+Rules:
+- Use line breaks for readability
+- Use • for bullet points (not *, -, or numbers)
+- Put links on separate lines with 🔗 emoji
+- Use emojis for visual structure
+- Keep it concise and scannable
+- Preserve all original links
+- No bold/italic/code formatting (Telegram won't render properly)
+- Categories should emerge from content, not be forced"""
 
     @staticmethod
     def _create_user_prompt(
@@ -159,7 +184,7 @@ Output format:
 
 {messages_text}
 
-Remember: group by categories, make brief summaries, preserve all source links."""
+IMPORTANT: Format for Telegram - use emojis, line breaks, • bullets, separate lines for links with 🔗. No Markdown formatting."""
 
     @staticmethod
     def _create_reduce_prompt(combined_summaries: str) -> str:
@@ -167,17 +192,25 @@ Remember: group by categories, make brief summaries, preserve all source links."
         return f"""You have several partial digests below. Combine them into one final structured digest.
 
 Tasks:
-1. Merge similar topics and categories
-2. Remove duplicates and repetitions
-3. Create a unified brief summary for each category
-4. Combine all source links
-5. Preserve structure: category → summary → list of posts with links
+1. Identify and merge similar topics and categories across partial digests
+2. Choose appropriate emojis for each merged category
+3. Remove duplicates and repetitions
+4. Create a unified brief summary for each final category
+5. Combine all source links
+6. Preserve Telegram-friendly format
 
 Partial digests:
 
 {combined_summaries}
 
-Create the final digest with the same structure (categories with emoji, summary, links)."""
+IMPORTANT: Create final digest using Telegram format:
+- Identify natural categories from the content (don't force predetermined ones)
+- Use appropriate emojis for each category based on its theme
+- Use • for bullet points
+- Put links on separate lines with 🔗
+- Use line breaks for readability
+- No Markdown formatting (no **, __, ```)
+- Categories should reflect the actual content, not predetermined templates"""
 
 
 from typing import Optional
