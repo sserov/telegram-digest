@@ -169,42 +169,36 @@ python -m src.main --help
 
 ## Automated Daily Generation
 
-You can set up automatic daily digest generation using cron:
+You can set up automatic daily digest generation using cron.
 
 ### Quick Setup
 
 1. Create your script from the example:
    ```bash
    cp run_digest.sh.example run_digest.sh
-   ```
-
-2. Edit `run_digest.sh` and update the `PROJECT_DIR` variable:
-   ```bash
-   PROJECT_DIR="/Users/yourusername/path/to/telegram-digest"
-   ```
-
-3. Make executable and test:
-   ```bash
+   # Edit run_digest.sh with your paths
    chmod +x run_digest.sh
-   ./run_digest.sh
+   ./run_digest.sh  # Test it
    ```
 
-4. Set up daily execution at 22:00 (10 PM):
+2. Set up daily execution at 22:00 (10 PM):
    ```bash
    (crontab -l 2>/dev/null; echo "0 22 * * * /path/to/telegram-digest/run_digest.sh >> /path/to/telegram-digest/cron.log 2>&1") | crontab -
    ```
 
-5. Verify cron job:
+3. Verify cron job:
    ```bash
    crontab -l
    ```
 
-6. Check logs:
+4. Check logs:
    ```bash
    tail -f cron.log
    ```
 
-For detailed setup instructions, troubleshooting, and alternative schedules, see [CRON_SETUP.md](CRON_SETUP.md).
+**⚠️ macOS Users**: If you get "Operation not permitted" errors, you need to grant Full Disk Access to cron in System Settings → Privacy & Security → Full Disk Access → add `/usr/sbin/cron`.
+
+For detailed setup instructions and troubleshooting, see [CRON_SETUP.md](CRON_SETUP.md).
 
 ## Configuration
 

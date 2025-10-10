@@ -4,6 +4,8 @@
 
 The project is configured to automatically generate and send digests every day at 22:00 (10 PM).
 
+**⚠️ macOS Users**: Recent macOS versions have strict security policies. If you get "Operation not permitted" errors, you need to grant Full Disk Access to cron (see Troubleshooting section below).
+
 ## Setup Details
 
 ### Script: `run_digest.sh`
@@ -88,6 +90,39 @@ Test the script manually before relying on cron:
 
 ## Troubleshooting
 
+### macOS: "Operation not permitted" Error
+
+This is the most common issue on macOS Catalina and later.
+
+**Symptoms:**
+```
+/bin/bash: /path/to/run_digest.sh: Operation not permitted
+```
+
+**Solution: Grant Full Disk Access to cron**
+
+1. Open **System Settings** (or System Preferences on older macOS)
+2. Go to **Privacy & Security** → **Full Disk Access**
+3. Click the lock 🔒 and authenticate with your password
+4. Click the `+` button
+5. Press `Cmd+Shift+G` to open "Go to folder"
+6. Enter `/usr/sbin/cron` and press Enter
+7. Select `cron` and click "Open"
+8. Enable the checkbox for `cron`
+9. Restart your Mac (or just test the cron job)
+
+**Alternative: Check script permissions**
+```bash
+# Make sure script is executable
+chmod +x /path/to/run_digest.sh
+
+# Test manually first
+/path/to/run_digest.sh
+
+# Check file permissions
+ls -la /path/to/run_digest.sh
+```
+
 ### Cron Not Running
 
 1. **Check cron service is running (macOS):**
@@ -159,12 +194,3 @@ Examples:
 - `0 22 * * *` - Every day at 10:00 PM (current)
 - `0 18 * * 1-5` - Weekdays at 6:00 PM
 - `0 12 * * 0` - Every Sunday at noon
-
-## Alternative: launchd (macOS Recommended)
-
-For macOS, launchd is more reliable than cron. To migrate:
-
-1. Create plist file: `~/Library/LaunchAgents/com.sserov.telegram-digest.plist`
-2. Use `launchctl load/unload` to manage
-
-See macOS documentation for details.
