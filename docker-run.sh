@@ -9,6 +9,17 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
+# Detect Docker Compose command (v2: 'docker compose', v1: 'docker-compose')
+if docker compose version &> /dev/null; then
+    DOCKER_COMPOSE="docker compose"
+elif docker-compose version &> /dev/null; then
+    DOCKER_COMPOSE="docker-compose"
+else
+    echo "❌ Error: Docker Compose not found"
+    echo "   Install Docker Compose: https://docs.docker.com/compose/install/"
+    exit 1
+fi
+
 # Check if .env exists
 if [ ! -f .env ]; then
     echo "❌ Error: .env file not found"
@@ -35,7 +46,7 @@ if [ ! -f sessions/telegram_session.session ]; then
     echo "First-time setup required:"
     echo "Run this command for interactive authentication:"
     echo ""
-    echo "  docker-compose run --rm telegram-digest python -m src.main --channels @test_channel"
+    echo "  $DOCKER_COMPOSE run --rm telegram-digest python -m src.main --channels @test_channel"
     echo ""
     echo "After authentication, run this script again."
     exit 1
@@ -43,7 +54,7 @@ fi
 
 # Run digest generation
 echo "🚀 Starting Telegram Digest Generator..."
-docker-compose up --abort-on-container-exit
+$DOCKER_COMPOSE up --abort-on-container-exit
 
 # Get exit code
 EXIT_CODE=$?
@@ -56,6 +67,6 @@ else
 fi
 
 # Cleanup
-docker-compose down
+$DOCKER_COMPOSE down
 
 exit $EXIT_CODE
