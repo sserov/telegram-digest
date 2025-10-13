@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Telegram Digest - VPS Cron Runner
+# This script is designed to run on VPS via cron
+#
+# Setup:
+# 1. Copy this file: cp vps-cron.sh.example vps-cron.sh
+# 2. Edit vps-cron.sh and update PROJECT_DIR with your path
+# 3. Make executable: chmod +x vps-cron.sh
+# 4. Add to crontab:
+#    crontab -e
+#    0 22 * * * /full/path/to/vps-cron.sh
+
+set -e
+
+# CHANGE THIS to your actual project directory on VPS
+PROJECT_DIR="/home/user/telegram-digest"
+
+# Navigate to project directory
+cd "$PROJECT_DIR"
+
+# Log start time
+echo "==================================="
+echo "$(date): Starting digest generation"
+echo "==================================="
+
+# Run Docker container
+./docker-run.sh
+
+# Log completion
+echo "$(date): Digest generation completed"
+echo ""

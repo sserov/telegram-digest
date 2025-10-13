@@ -1,0 +1,58 @@
+# Git files
+.git
+.gitignore
+.github
+
+# Python cache
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentation (not needed in container)
+*.md
+docs/
+
+# User-specific files (mounted as volumes)
+.env
+channels.yaml
+*.session
+*.session-journal
+
+# Logs and output (mounted as volumes)
+logs/
+output/
+sessions/
+cron.log
+launchd.log
+digest_*.txt
+
+# Scripts not needed in container
+run_digest.sh
+docker-run.sh
+backup.sh
+
+# Test files
+tests/
+test_*.py
+
+# CI/CD
+.travis.yml
+.gitlab-ci.yml
+
+# Other
+.DS_Store
+*.bak

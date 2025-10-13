@@ -3,13 +3,42 @@
 import argparse
 import asyncio
 import sys
+import logging
 from datetime import datetime, timedelta
 from typing import List, Optional
+from pathlib import Path
 
 from .config import Config
 from .telegram_fetcher import TelegramFetcher
 from .digest_generator import DigestGenerator
 from .output_handler import OutputHandler
+
+
+def setup_logging():
+    """Configure logging to both console and file."""
+    # Create logs directory if it doesn't exist
+    log_dir = Path("logs")
+    log_dir.mkdir(exist_ok=True)
+    
+    # Configure logging format
+    log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+    # Set up file handler
+    log_file = log_dir / "digest.log"
+    file_handler = logging.FileHandler(log_file, encoding='utf-8')
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(logging.Formatter(log_format))
+    
+    # Set up console handler
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(logging.Formatter(log_format))
+    
+    # Configure root logger
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    root_logger.addHandler(file_handler)
+    root_logger.addHandler(console_handler)
 
 
 def parse_date(date_str: str) -> datetime:
@@ -116,6 +145,10 @@ Environment variables (set in .env file):
 
 async def main_async():
     """Main async function."""
+    # Set up logging
+    setup_logging()
+    logger = logging.getLogger(__name__)
+    
     # Parse arguments
     args = parse_args()
 
