@@ -77,6 +77,16 @@ class TelegramFetcher:
             Config.TELEGRAM_API_ID,
             Config.TELEGRAM_API_HASH,
         )
+        
+        # Custom start with clear instructions
+        print("\n" + "="*60)
+        print("📱 TELEGRAM AUTHENTICATION")
+        print("="*60)
+        print("⚠️  IMPORTANT: Enter your PHONE NUMBER, not bot token!")
+        print("   Example: +1234567890 (with country code)")
+        print("   Bot tokens don't work for reading messages from channels.")
+        print("="*60 + "\n")
+        
         await self.client.start()
         return self
 
