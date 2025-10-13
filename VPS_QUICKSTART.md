@@ -41,9 +41,10 @@ nano channels.yaml  # Add your channels
 # Build Docker image
 docker-compose build
 
-# First run - authenticate with Telegram
+# First run - authenticate with Telegram (IMPORTANT!)
 docker-compose run --rm telegram-digest python -m src.main --channels @test_channel
 # Enter phone number and code when prompted
+# This creates sessions/telegram_session.session
 
 # Test run
 ./docker-run.sh
@@ -52,6 +53,14 @@ docker-compose run --rm telegram-digest python -m src.main --channels @test_chan
 ls -la output/
 cat output/digest_*.txt
 ```
+
+**⚠️ Important**: The first `docker-compose run` command is **interactive**. You must:
+1. Enter your phone number (with country code, e.g., +1234567890)
+2. Wait for Telegram code (sent to your Telegram app)
+3. Enter the confirmation code
+4. Session is saved to `sessions/telegram_session.session`
+
+After authentication, you can use `./docker-run.sh` for all future runs.
 
 ## 3. Schedule with Cron
 

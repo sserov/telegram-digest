@@ -28,6 +28,19 @@ fi
 # Create necessary directories
 mkdir -p logs sessions output
 
+# Check if Telegram session exists
+if [ ! -f sessions/telegram_session.session ]; then
+    echo "⚠️  Warning: Telegram session not found"
+    echo ""
+    echo "First-time setup required:"
+    echo "Run this command for interactive authentication:"
+    echo ""
+    echo "  docker-compose run --rm telegram-digest python -m src.main --channels @test_channel"
+    echo ""
+    echo "After authentication, run this script again."
+    exit 1
+fi
+
 # Run digest generation
 echo "🚀 Starting Telegram Digest Generator..."
 docker-compose up --abort-on-container-exit
