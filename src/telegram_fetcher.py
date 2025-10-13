@@ -66,8 +66,14 @@ class TelegramFetcher:
 
     async def __aenter__(self):
         """Async context manager entry."""
+        # Use sessions directory for session file
+        from pathlib import Path
+        sessions_dir = Path("sessions")
+        sessions_dir.mkdir(exist_ok=True)
+        session_path = sessions_dir / Config.TELEGRAM_SESSION_NAME
+        
         self.client = TelegramClient(
-            Config.TELEGRAM_SESSION_NAME,
+            str(session_path),
             Config.TELEGRAM_API_ID,
             Config.TELEGRAM_API_HASH,
         )
