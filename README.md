@@ -9,21 +9,54 @@ This project collects posts from specified Telegram channels over a defined peri
 ## Features
 
 - 📥 Collect posts from multiple Telegram channels
-- � Support for Telegram folder invite links (automatic channel expansion)
-- �📅 Filter posts by date (can specify a date range)
+- 📁 Support for Telegram folder invite links (automatic channel expansion)
+- 📅 Filter posts by date (can specify a date range)
 - 🤖 Generate structured digests using Cerebras AI
 - 📊 Automatic grouping by categories with importance-based sorting
 - 💾 Save digest to text file
 - 📤 Send digest to Telegram via Bot API (HTML formatting)
 - 🔄 Map-reduce processing for large data volumes
 - ⏰ Automated daily generation via cron/scheduler
+- 🐳 Docker support for easy deployment on VPS
 
 ## Requirements
 
+### Local Installation
 - Python 3.9+
 - Telegram API credentials (api_id and api_hash) for reading messages
 - Cerebras API key for AI digest generation
 - Telegram Bot Token for sending digests (get from @BotFather)
+
+### Docker Deployment (Recommended for VPS)
+- Docker and Docker Compose
+- VPS with SSH access
+- Same credentials as above
+
+## Quick Start
+
+### Option 1: Docker on VPS (Recommended for Production)
+
+**Note**: Docker is for VPS deployment only. For local development, use Option 2.
+
+```bash
+# On your VPS (not local machine):
+# Clone repository
+git clone https://github.com/sserov/telegram-digest.git
+cd telegram-digest
+
+# Configure
+cp .env.example .env
+cp channels.yaml.example channels.yaml
+# Edit .env and channels.yaml with your credentials
+
+# Build and run
+docker-compose build
+./docker-run.sh
+```
+
+See **[VPS_QUICKSTART.md](VPS_QUICKSTART.md)** for 5-minute VPS setup or **[DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md)** for complete guide.
+
+### Option 2: Local Python (For Development and Local Use)
 
 ## Installation
 
@@ -169,42 +202,36 @@ python -m src.main --help
 
 ## Automated Daily Generation
 
-You can set up automatic daily digest generation using cron:
+You can set up automatic daily digest generation using cron.
 
 ### Quick Setup
 
 1. Create your script from the example:
    ```bash
    cp run_digest.sh.example run_digest.sh
-   ```
-
-2. Edit `run_digest.sh` and update the `PROJECT_DIR` variable:
-   ```bash
-   PROJECT_DIR="/Users/yourusername/path/to/telegram-digest"
-   ```
-
-3. Make executable and test:
-   ```bash
+   # Edit run_digest.sh with your paths
    chmod +x run_digest.sh
-   ./run_digest.sh
+   ./run_digest.sh  # Test it
    ```
 
-4. Set up daily execution at 22:00 (10 PM):
+2. Set up daily execution at 22:00 (10 PM):
    ```bash
    (crontab -l 2>/dev/null; echo "0 22 * * * /path/to/telegram-digest/run_digest.sh >> /path/to/telegram-digest/cron.log 2>&1") | crontab -
    ```
 
-5. Verify cron job:
+3. Verify cron job:
    ```bash
    crontab -l
    ```
 
-6. Check logs:
+4. Check logs:
    ```bash
    tail -f cron.log
    ```
 
-For detailed setup instructions, troubleshooting, and alternative schedules, see [CRON_SETUP.md](CRON_SETUP.md).
+**⚠️ macOS Users**: If you get "Operation not permitted" errors, you need to grant Full Disk Access to cron in System Settings → Privacy & Security → Full Disk Access → add `/usr/sbin/cron`.
+
+For detailed setup instructions and troubleshooting, see [CRON_SETUP.md](CRON_SETUP.md).
 
 ## Configuration
 
@@ -420,12 +447,23 @@ MIT License - see [LICENSE](LICENSE)
 
 If you have questions or suggestions:
 - Create an Issue in the repository
-- See documentation in QUICKSTART.md and DEVELOPMENT.md
+- See documentation below
+
+## Documentation
+
+- **[QUICKSTART.md](QUICKSTART.md)** - Quick start guide for local setup
+- **[DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md)** - Complete Docker deployment guide for VPS
+- **[VPS_QUICKSTART.md](VPS_QUICKSTART.md)** - Fast VPS deployment in 5 minutes
+- **[DOCKER.md](DOCKER.md)** - Docker files overview and troubleshooting
+- **[DEVELOPMENT.md](DEVELOPMENT.md)** - Development setup and contribution guide
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and design
+- **[CRON_SETUP.md](CRON_SETUP.md)** - Cron scheduling guide (local/VPS)
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history and changes
 
 ## Author
 
 Created as a PoC for automated Telegram digest generation with Cerebras AI.
 
-**Version**: 0.1.0  
-**Status**: Production-ready PoC  
+**Version**: 0.6.0  
+**Status**: Production-ready  
 **Last Updated**: October 2025

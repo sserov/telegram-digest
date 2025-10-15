@@ -66,11 +66,27 @@ class TelegramFetcher:
 
     async def __aenter__(self):
         """Async context manager entry."""
+        # Use sessions directory for session file
+        from pathlib import Path
+        sessions_dir = Path("sessions")
+        sessions_dir.mkdir(exist_ok=True)
+        session_path = sessions_dir / Config.TELEGRAM_SESSION_NAME
+        
         self.client = TelegramClient(
-            Config.TELEGRAM_SESSION_NAME,
+            str(session_path),
             Config.TELEGRAM_API_ID,
             Config.TELEGRAM_API_HASH,
         )
+        
+        # Custom start with clear instructions
+        print("\n" + "="*60)
+        print("📱 TELEGRAM AUTHENTICATION")
+        print("="*60)
+        print("⚠️  IMPORTANT: Enter your PHONE NUMBER, not bot token!")
+        print("   Example: +1234567890 (with country code)")
+        print("   Bot tokens don't work for reading messages from channels.")
+        print("="*60 + "\n")
+        
         await self.client.start()
         return self
 

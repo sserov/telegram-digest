@@ -1,0 +1,20 @@
+services:
+  telegram-digest:
+    build: .
+    container_name: telegram-digest
+    restart: "no"  # Don't auto-restart, use cron to schedule
+    env_file:
+      - .env
+    volumes:
+      # Mount channels.yaml (user can customize)
+      - ./channels.yaml:/app/channels.yaml:ro
+      # Mount sessions directory (persistent Telegram auth)
+      - ./sessions:/app/sessions
+      # Mount logs directory (persistent logs)
+      - ./logs:/app/logs
+      # Mount digests output directory
+      - ./output:/app/output
+    environment:
+      # Override output paths to use mounted volumes
+      - PYTHONUNBUFFERED=1
+    command: python -m src.main --send-to-telegram

@@ -241,11 +241,14 @@ class OutputHandler:
             # Add part header with bold formatting
             part_with_header = f"**[Part {i}/{len(parts)}]**\n\n{part}"
             
+            print(f"📤 Sending part {i}/{len(parts)} ({len(part_with_header)} chars)...")
             result = OutputHandler.send_via_bot_api(part_with_header, target)  # NOT await
             
             if not result:
                 success = False
                 print(f"❌ Failed to send part {i}/{len(parts)}")
+                print(f"   Part length: {len(part_with_header)} chars")
+                print(f"   First 200 chars of part: {part_with_header[:200]}")
                 break
 
             print(f"✅ Sent part {i}/{len(parts)}")

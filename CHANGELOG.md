@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2025-10-13
+
+### Added
+- **🐳 Docker support** - Complete containerization for easy VPS deployment
+- Dockerfile with Python 3.11 and all dependencies
+- docker-compose.yml with proper volume mounts for persistence
+- docker-run.sh script for easy container execution
+- Logging to files (logs/digest.log) in addition to console
+- .dockerignore for optimized build context
+
+### Documentation
+- DOCKER_DEPLOYMENT.md - Complete VPS deployment guide
+- VPS_QUICKSTART.md - Quick start guide for fast deployment
+- DOCKER.md - Docker files overview and troubleshooting
+- vps-cron.sh.example - Template for VPS cron scheduling
+
+### Improved
+- Persistent storage for sessions, logs, and output via Docker volumes
+- Easy updates via rebuild (git pull + docker-compose build)
+- Isolated environment eliminates dependency conflicts
+- Better logging with file output for debugging
+
+### Infrastructure
+- Added logging configuration in main.py
+- Created logs/ directory structure
+- Session files now stored in sessions/ directory
+- Output digests stored in output/ directory
+
 ## [0.5.0] - 2025-10-07
 
 ### Added

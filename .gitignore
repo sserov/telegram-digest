@@ -141,16 +141,28 @@ cython_debug/
 # Telegram session files
 *.session
 *.session-journal
+sessions/
 
 # Output files
 digest_*.txt
 output/
 
-# Cron logs
+# Logs
 cron.log
+logs/
 
 # User-specific scripts
 run_digest.sh
 
+# Docker volumes
+sessions/
+logs/
+output/
+
 # Other
 PROJECT_STATUS.md
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
