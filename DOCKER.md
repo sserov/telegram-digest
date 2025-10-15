@@ -5,7 +5,7 @@ This directory contains Docker-related files for deploying Telegram Digest Gener
 ## Files
 
 ### Core Files
-- **Dockerfile** - Image definition with Python 3.11 and dependencies
+- **Dockerfile** - Image definition with Python 3.13 and dependencies
 - **docker-compose.yml** - Service configuration with volume mounts
 - **.dockerignore** - Files to exclude from Docker build context
 
