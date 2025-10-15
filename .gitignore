@@ -161,3 +161,8 @@ output/
 
 # Other
 PROJECT_STATUS.md
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
