@@ -43,13 +43,28 @@ mkdir -p logs sessions output
 if [ ! -f sessions/telegram_session.session ]; then
     echo "⚠️  Warning: Telegram session not found"
     echo ""
-    echo "First-time setup required:"
-    echo "Run this command for interactive authentication:"
+    echo "📱 Starting interactive authentication..."
+    echo "   You will need to enter your phone number and confirmation code."
     echo ""
-    echo "  $DOCKER_COMPOSE run --rm telegram-digest python -m src.main --channels @test_channel"
+    
+    # Run interactive authentication
+    $DOCKER_COMPOSE run --rm telegram-digest python -m src.main --channels @test_channel
+    
+    # Check if session was created
+    if [ ! -f sessions/telegram_session.session ]; then
+        echo ""
+        echo "❌ Authentication failed - session file not created"
+        echo "   Please try again and make sure to:"
+        echo "   1. Enter your phone number with country code (e.g., +1234567890)"
+        echo "   2. Wait for the code in Telegram"
+        echo "   3. Enter the confirmation code"
+        exit 1
+    fi
+    
     echo ""
-    echo "After authentication, run this script again."
-    exit 1
+    echo "✅ Authentication successful! Session saved."
+    echo "   Now starting digest generation..."
+    echo ""
 fi
 
 # Run digest generation
