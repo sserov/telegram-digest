@@ -293,7 +293,7 @@ def main():
         sys.exit(1)
 
 
-# ssh -i ./Users/-user-/.ssh/id_ed25519 root@ip.ip.ip.ip
+# ssh -i /Users/-user-/.ssh/id_ed25519 root@ip.ip.ip.ip
 
 
 if __name__ == "__main__":
