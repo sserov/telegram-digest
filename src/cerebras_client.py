@@ -1,9 +1,12 @@
 """Cerebras AI client for digest generation."""
 
+import time
 from typing import List, Dict, Any, Optional
 from cerebras.cloud.sdk import Cerebras
 
 from .config import Config
+
+_RETRY_DELAYS = [30, 60, 120]  # seconds to wait between retries on 429
 
 
 class CerebrasClient:
@@ -34,21 +37,12 @@ class CerebrasClient:
 
         user_prompt = self._create_user_prompt(messages_text)
 
-        try:
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                temperature=self.temperature,
-                max_tokens=self.max_tokens,
-            )
-
-            return response.choices[0].message.content.strip()
-
-        except Exception as e:
-            raise RuntimeError(f"Cerebras API error: {e}")
+        return self._call_with_retry(
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ]
+        )
 
     def generate_digest_map_reduce(
         self, message_chunks: List[str], system_prompt: Optional[str] = None
@@ -77,17 +71,12 @@ class CerebrasClient:
             )
 
             try:
-                response = self.client.chat.completions.create(
-                    model=self.model,
+                partial_summary = self._call_with_retry(
                     messages=[
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": partial_prompt},
-                    ],
-                    temperature=self.temperature,
-                    max_tokens=self.max_tokens,
+                    ]
                 )
-
-                partial_summary = response.choices[0].message.content.strip()
                 partial_summaries.append(partial_summary)
 
             except Exception as e:
@@ -103,20 +92,46 @@ class CerebrasClient:
         reduce_prompt = self._create_reduce_prompt(combined_text)
 
         try:
-            response = self.client.chat.completions.create(
-                model=self.model,
+            return self._call_with_retry(
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": reduce_prompt},
-                ],
-                temperature=self.temperature,
-                max_tokens=self.max_tokens,
+                ]
             )
-
-            return response.choices[0].message.content.strip()
 
         except Exception as e:
             raise RuntimeError(f"Error in reduce phase: {e}")
+
+    def _call_with_retry(self, messages: List[Dict[str, str]]) -> str:
+        """Call Cerebras API with retry on 429 rate limit errors."""
+        for attempt, delay in enumerate(_RETRY_DELAYS, 1):
+            try:
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=messages,
+                    temperature=self.temperature,
+                    max_tokens=self.max_tokens,
+                )
+                return response.choices[0].message.content.strip()
+            except Exception as e:
+                error_str = str(e)
+                if "429" in error_str or "rate" in error_str.lower() or "too many" in error_str.lower():
+                    print(f"⚠️  Rate limit hit (attempt {attempt}/{len(_RETRY_DELAYS)}). Waiting {delay}s...")
+                    time.sleep(delay)
+                else:
+                    raise RuntimeError(f"Cerebras API error: {e}")
+
+        # Final attempt after all retries
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=self.temperature,
+                max_tokens=self.max_tokens,
+            )
+            return response.choices[0].message.content.strip()
+        except Exception as e:
+            raise RuntimeError(f"Cerebras API error after {len(_RETRY_DELAYS)} retries: {e}")
 
     @staticmethod
     def _get_default_system_prompt() -> str:
