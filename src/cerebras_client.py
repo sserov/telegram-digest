@@ -159,56 +159,90 @@ Guidelines for categories:
   💡 Insights / 🎯 Applications / 🔧 Infrastructure / 🌐 Community
   📊 Data / 🤖 Models / 💻 Code / 🎓 Education / etc.
 
+Content-type icons — use ONE of these instead of 🔹 for every news item:
+- 📄 research paper, academic study, benchmark
+- 🚀 product launch, tool release, new version
+- 💬 opinion, analysis, discussion, insight
+- 🎓 tutorial, course, educational content, how-to
+- 📰 industry news, business event, incident, report
+
 Output format for Telegram (using Markdown):
 
 **📊 ML/AI Digest — [date in format: DD Month YYYY]**
+[One sentence: overall theme of today's digest, e.g. "Сегодня: активность вокруг агентов, один крупный инцидент, новые эмбеддинги от Google."]
 
-For each category (separated from the previous one by ━━━━━━━━):
+**⚡ Главное за день**
+• [Most important headline from the entire digest]
+• [2nd most important]
+• [3rd most important]
+• [4th most important]
+• [5th most important — omit if fewer than 5 items total]
 
-**[Emoji] [Category Name in same language as posts]**
+━━━━━━━━
+
+**[Emoji] [Category Name in same language as posts]** (N)
 [One-line description of what this category covers, plain text, no bold]
 
-For each news item in this category (blank line between items):
+[type_icon] **[News headline]** [🔥 if covered by 3 or more source channels]
+>[Summary: 2-3 sentences with key facts and numbers. Что это значит: one sentence on the practical implication for the reader.]
+[Source channel name](post_url)
+[Source channel name](post_url)
 
-🔹 **[News headline - concise title for this news item]**
->[Summary: 2-3 sentences with key facts, numbers, and context]
-[Source channel name](post_url)
-[Source channel name](post_url)
+[blank line between items]
+
+━━━━━━━━
+
+[Next category...]
 
 Example of correct output:
 
 **📊 ML/AI Digest — 10 March 2026**
+Сегодня: доминируют агентные фреймворки, один крупный инцидент в Amazon, прорывных исследований мало.
 
-**📚 Исследования**
+**⚡ Главное за день**
+• Speculative Decoding ускоряет генерацию токенов до 5×
+• Claude Code Review: агент ревью кода от Anthropic (15–25 $ за PR)
+• Инцидент в Amazon: AI-агент Kiro вызвал длительные сбои на сайте
+• a16z: дневная аудитория Sora превысила 3 млн
+• Meta покупает Moltbook — соцсеть для ИИ-агентов
+
+━━━━━━━━
+
+**📚 Исследования** (2)
 Новые научные разработки, меняющие подходы к генерации и эмбеддингам.
 
-🔹 **Speculative Decoding ускоряет генерацию до 5×**
->Авторы представили метод SSD, который предсказывает результаты верификации и генерирует несколько вариантов параллельно, достигая 5-кратного ускорения по сравнению с авторегрессивным декодированием.
+📄 **Speculative Decoding ускоряет генерацию до 5×**
+>Авторы представили метод SSD, предсказывающий результаты верификации, что позволяет генерировать несколько вариантов параллельно и достигать 5-кратного ускорения. Что это значит: inference-пайплайны можно ускорить без изменения самой модели.
 [gonzo_ML](https://t.me/gonzo_ML/123)
 
-🔹 **Gemini Embedding 002: мультимодальные эмбеддинги до 8К токенов**
->Google выпустил новую серию эмбеддингов, поддерживающих текст, изображения, аудио и видео в одном векторе.
+📄 **Gemini Embedding 002: мультимодальные эмбеддинги до 8К токенов**
+>Google выпустил серию эмбеддингов для текста, изображений, аудио и видео в одном векторе с поддержкой обрезки до 768 измерений. Что это значит: мультимодальный поиск становится практичным без раздельных моделей.
 [epsiloncorrect](https://t.me/epsiloncorrect/456)
 
 ━━━━━━━━
 
-**🤖 Агентные технологии**
+**🤖 Агентные технологии** (3)
 Обновления и аналитика вокруг LLM-агентов и их экосистем.
 
-🔹 **Claude Code Review: агент ревью кода от Anthropic**
->Новый многоагентный сервис интегрируется с GitHub, автоматически оставляя детальные комментарии в диффе.
+🚀 **Claude Code Review: агент ревью кода от Anthropic** 🔥
+>Многоагентный сервис интегрируется с GitHub, оставляя детальные комментарии в диффе; тесты показывают 84% обнаружения проблем в больших PR. Что это значит: автоматизация code review стала доступной за предсказуемую цену уже сейчас.
 [seeallochnaya](https://t.me/seeallochnaya/789)
+[data_secrets](https://t.me/data_secrets/456)
 
 Rules:
-- Use **bold** for digest title and category names only
-- Category description: plain text on the line immediately below the bold category header
-- For each news item: 🔹 + **bold headline** on one line, then >summary on next line, then source links
-- Summary in quote format >text is REQUIRED for every news item (2-3 sentences, include concrete numbers/facts)
-- Source links come directly after the quote, each on its own line: [Channel name](telegram_post_url)
-- Include ONLY Telegram post links (t.me/...), exclude external links (twitter, arxiv, github, etc.)
+- Digest title: **bold**
+- One-liner: plain text on the line immediately after the title (no bold, no prefix)
+- TL;DR block: **⚡ Главное за день** header (bold), then bullet points with • (not hyphens), top 3–5 items only
+- ━━━━━━━━ separator after TL;DR block and between every category
+- Category header: **bold emoji + name** followed by item count in parentheses (N), e.g. **📚 Исследования** (3)
+- Category description: plain text on the line immediately below the category header
+- Item icon: use the appropriate content-type icon (📄🚀💬🎓📰) — NEVER use 🔹
+- 🔥 after the headline (before newline) if 3 or more distinct source channels covered this item
+- Summary: quote format >text, REQUIRED, 2-3 sentences + "Что это значит: ..." implication sentence at the end
+- Source links: each on its own line directly after the quote: [Channel name](telegram_post_url)
+- Include ONLY Telegram post links (t.me/...), exclude external links
 - If multiple posts cover same news, combine under one headline with multiple source links
 - Blank line between news items within a category
-- ━━━━━━━━ separator between categories (not before the first category, not after the last)
 - Sort categories by importance (most impactful first)
 - Sort news items within each category by importance
 - Categories should emerge from content, not be forced
@@ -229,15 +263,17 @@ Rules:
 {messages_text}
 
 IMPORTANT: Format for Telegram using Markdown:
-- Category names in the SAME LANGUAGE as posts
-- Category header: **bold**, then on the NEXT LINE a plain-text one-line description (no bold, no 📝 prefix)
-- For each news item: 🔹 **bold headline**, then >summary (2-3 sentences, required), then source links
-- Summary MUST be in quote format: >text — do NOT skip it
-- Source links on separate lines after the quote: [Channel name](telegram_post_url)
-- ONLY Telegram links (t.me/...), exclude external links (twitter, arxiv, github, etc.)
-- If same channel has multiple posts, repeat channel name with different URLs
-- Blank line between news items within a category
-- ━━━━━━━━ separator line between categories (not before first, not after last)"""
+- Title **bold**, then one-liner (plain text, no prefix) on the very next line
+- **⚡ Главное за день** block: bold header, then • bullet list of 3–5 most important headlines
+- ━━━━━━━━ after TL;DR block and between every category
+- Category header: **bold emoji + name** (N) — e.g. **📚 Исследования** (3), then plain-text description on next line
+- Item icon: 📄 paper, 🚀 release, 💬 opinion, 🎓 tutorial, 📰 news — NEVER use 🔹
+- 🔥 after headline if 3+ distinct source channels covered it
+- Summary: >text format, REQUIRED — end with "Что это значит: ..." implication sentence
+- Source links after the quote, one per line: [Channel name](telegram_post_url)
+- ONLY Telegram links (t.me/...), exclude external links
+- Blank line between items within a category
+- Category names in the SAME LANGUAGE as posts"""
 
     @staticmethod
     def _create_reduce_prompt(combined_summaries: str) -> str:
@@ -259,16 +295,17 @@ Partial digests:
 IMPORTANT: Create final digest using Telegram Markdown format:
 - Identify natural categories from the content (don't force predetermined ones)
 - Category names in the SAME LANGUAGE as post content
-- Use appropriate emojis for each category based on its theme
-- Use **bold** for digest title and category names only
-- Category header: **bold**, then on the NEXT LINE a plain-text one-line description (no bold, no 📝 prefix)
-- For each news item: 🔹 **bold headline**, then >summary (2-3 sentences, required), then source links
-- Summary MUST be in quote format: >text — do NOT skip it
-- Source links on separate lines after the quote: [Channel name](telegram_post_url)
-- Include ONLY Telegram post links (t.me/...), exclude external links (twitter, arxiv, github, etc.)
-- If same channel has multiple posts, repeat channel name with different URLs
-- Blank line between news items within a category
-- ━━━━━━━━ separator line between categories (not before first, not after last)
+- Title **bold**, then one-liner (plain text) on the very next line
+- **⚡ Главное за день** block: bold header, then • bullet list of 3–5 most important headlines across all categories
+- ━━━━━━━━ after TL;DR block and between every category
+- Category header: **bold emoji + name** (N) — include item count, e.g. **🤖 Агентные технологии** (4)
+- Category description: plain text on the line immediately below the category header
+- Item icon: 📄 paper, 🚀 release, 💬 opinion, 🎓 tutorial, 📰 news — NEVER use 🔹
+- 🔥 after headline if 3+ distinct source channels covered it
+- Summary: >text format, REQUIRED — end with "Что это значит: ..." implication sentence
+- Source links after the quote, one per line: [Channel name](telegram_post_url)
+- Include ONLY Telegram post links (t.me/...), exclude external links
+- Blank line between items within a category
 - Categories should reflect the actual content, not predetermined templates"""
 
 
