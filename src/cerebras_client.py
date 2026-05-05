@@ -140,6 +140,14 @@ class CerebrasClient:
 
 IMPORTANT: Format for Telegram using Markdown.
 
+FILTERING — apply before anything else:
+- SKIP entirely (do not include anywhere in the digest): promotional posts, ads, sponsored content, giveaways,
+  posts selling courses/services/tools, affiliate links, channel self-promotion, subscription CTAs.
+  Signs: prices mentioned, "купить"/"buy"/"скидка"/"discount"/"реклама"/"sponsored"/"партнёр", contests,
+  referral codes, "подпишись"/"subscribe" as the main call-to-action.
+- HUMOR section (separate, at the very end): jokes, memes, anecdotes, funny observations, clearly
+  satirical posts where the author is joking and not making a real announcement.
+
 Your task:
 1. Analyze the content of posts and identify natural thematic categories
 2. Group posts by these categories (don't force predetermined categories)
@@ -165,6 +173,7 @@ Content-type icons — use ONE of these instead of 🔹 for every news item:
 - 💬 opinion, analysis, discussion, insight
 - 🎓 tutorial, course, educational content, how-to
 - 📰 industry news, business event, incident, report
+- 😄 joke, meme, funny observation (ONLY in the humor section)
 
 Output format for Telegram (using Markdown):
 
@@ -230,13 +239,18 @@ Example of correct output:
 [data_secrets](https://t.me/data_secrets/456)
 
 Rules:
+- NEVER include promotional, advertising, or sponsored content anywhere in the digest
 - Digest title: **bold**
 - One-liner: plain text on the line immediately after the title (no bold, no prefix)
 - TL;DR block: **⚡ Главное за день** header (bold), then bullet points with • (not hyphens), top 3–5 items only
+- Humor items NEVER appear in **⚡ Главное за день**
 - ━━━━━━━━ separator after TL;DR block and between every category
 - Category header: **bold emoji + name** followed by item count in parentheses (N), e.g. **📚 Исследования** (3)
 - Category description: plain text on the line immediately below the category header
 - Item icon: use the appropriate content-type icon (📄🚀💬🎓📰) — NEVER use 🔹
+- 😄 humor items go ONLY in the **😄 Юмор** section at the very end of the digest
+- Humor section uses simplified format: 😄 **[brief headline]** then >[one sentence description] then source link
+- Humor items do NOT need "Что это значит:" implication sentence
 - 🔥 after the headline (before newline) if 3 or more distinct source channels covered this item
 - Summary: quote format >text, REQUIRED, 2-3 sentences + "Что это значит: ..." implication sentence at the end
 - Source links: each on its own line directly after the quote: [Channel name](telegram_post_url)
@@ -263,11 +277,14 @@ Rules:
 {messages_text}
 
 IMPORTANT: Format for Telegram using Markdown:
+- SKIP promotional, advertising, sponsored, and giveaway posts entirely — do not include them anywhere
+- Jokes, memes, and humor go in **😄 Юмор** section at the very end (not in Главное за день)
 - Title **bold**, then one-liner (plain text, no prefix) on the very next line
-- **⚡ Главное за день** block: bold header, then • bullet list of 3–5 most important headlines
+- **⚡ Главное за день** block: bold header, then • bullet list of 3–5 most important headlines (no humor items)
 - ━━━━━━━━ after TL;DR block and between every category
 - Category header: **bold emoji + name** (N) — e.g. **📚 Исследования** (3), then plain-text description on next line
 - Item icon: 📄 paper, 🚀 release, 💬 opinion, 🎓 tutorial, 📰 news — NEVER use 🔹
+- Humor items use 😄 icon and simplified format (no "Что это значит:")
 - 🔥 after headline if 3+ distinct source channels covered it
 - Summary: >text format, REQUIRED — end with "Что это значит: ..." implication sentence
 - Source links after the quote, one per line: [Channel name](telegram_post_url)
@@ -293,14 +310,17 @@ Partial digests:
 {combined_summaries}
 
 IMPORTANT: Create final digest using Telegram Markdown format:
+- SKIP promotional, advertising, sponsored, and giveaway posts entirely — do not include them anywhere
+- Jokes, memes, and humor go in **😄 Юмор** section at the very end (not in Главное за день)
 - Identify natural categories from the content (don't force predetermined ones)
 - Category names in the SAME LANGUAGE as post content
 - Title **bold**, then one-liner (plain text) on the very next line
-- **⚡ Главное за день** block: bold header, then • bullet list of 3–5 most important headlines across all categories
+- **⚡ Главное за день** block: bold header, then • bullet list of 3–5 most important headlines across all categories (no humor items)
 - ━━━━━━━━ after TL;DR block and between every category
 - Category header: **bold emoji + name** (N) — include item count, e.g. **🤖 Агентные технологии** (4)
 - Category description: plain text on the line immediately below the category header
 - Item icon: 📄 paper, 🚀 release, 💬 opinion, 🎓 tutorial, 📰 news — NEVER use 🔹
+- Humor items use 😄 icon and simplified format (no "Что это значит:")
 - 🔥 after headline if 3+ distinct source channels covered it
 - Summary: >text format, REQUIRED — end with "Что это значит: ..." implication sentence
 - Source links after the quote, one per line: [Channel name](telegram_post_url)
