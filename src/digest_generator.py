@@ -7,12 +7,22 @@ from .telegram_fetcher import TelegramMessage
 from .cerebras_client import CerebrasClient
 from .config import Config
 
+_GROUP_TITLES = {
+    "ai": "ML/AI Digest",
+    "news": "News Digest",
+}
+
+
+def _group_title(group: str) -> str:
+    return _GROUP_TITLES.get(group.lower(), f"{group.title()} Digest" if group else "Digest")
+
 
 class DigestGenerator:
     """Generates digests from Telegram messages using Cerebras AI."""
 
-    def __init__(self):
-        self.cerebras = CerebrasClient()
+    def __init__(self, group: str = ""):
+        self.group = group
+        self.cerebras = CerebrasClient(group=group)
 
     def generate_digest(
         self,
@@ -32,7 +42,7 @@ class DigestGenerator:
             Generated digest text
         """
         if not messages:
-            return self._generate_empty_digest(start_date, end_date)
+            return self._generate_empty_digest(start_date, end_date, self.group)
 
         # Format messages for LLM
         messages_text = self._format_messages(messages)
@@ -92,14 +102,14 @@ class DigestGenerator:
         return chunks
 
     @staticmethod
-    def _generate_empty_digest(start_date: datetime, end_date: datetime) -> str:
+    def _generate_empty_digest(start_date: datetime, end_date: datetime, group: str = "") -> str:
         """Generate digest for when no messages found."""
         if start_date.date() == (end_date - timedelta(days=1)).date():
             date_str = start_date.strftime("%d %B %Y")
         else:
             date_str = f"{start_date.strftime('%d %B')} - {(end_date - timedelta(days=1)).strftime('%d %B %Y')}"
 
-        return f"""**📊 ML/AI Digest — {date_str}**
+        return f"""**📊 {_group_title(group)} — {date_str}**
 
 ❌ No messages found for the specified period.
 

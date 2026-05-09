@@ -244,7 +244,7 @@ async def main_async():
 
             # Step 2: Generate digest
             print("🤖 Step 2: Generating digest with Cerebras AI...")
-            generator = DigestGenerator()
+            generator = DigestGenerator(group=args.group or "")
             digest = generator.generate_digest(messages, start_date, end_date)
 
             print("✅ Digest generated\n")

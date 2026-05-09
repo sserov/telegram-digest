@@ -9,15 +9,27 @@ from .config import Config
 _RETRY_DELAYS = [30, 60, 120]  # seconds to wait between retries on 429
 
 
+_GROUP_TITLES = {
+    "ai": "ML/AI Digest",
+    "news": "News Digest",
+}
+
+
+def _group_title(group: str) -> str:
+    return _GROUP_TITLES.get(group.lower(), f"{group.title()} Digest" if group else "Digest")
+
+
 class CerebrasClient:
     """Client for interacting with Cerebras AI API."""
 
-    def __init__(self):
+    def __init__(self, group: str = ""):
         """Initialize Cerebras client."""
         self.client = Cerebras(api_key=Config.CEREBRAS_API_KEY)
         self.model = Config.CEREBRAS_MODEL
         self.temperature = Config.TEMPERATURE
         self.max_tokens = Config.MAX_TOKENS_RESPONSE
+        self.group = group
+        self.digest_title = _group_title(group)
 
     def generate_digest(
         self, messages_text: str, system_prompt: Optional[str] = None
@@ -133,10 +145,10 @@ class CerebrasClient:
         except Exception as e:
             raise RuntimeError(f"Cerebras API error after {len(_RETRY_DELAYS)} retries: {e}")
 
-    @staticmethod
-    def _get_default_system_prompt() -> str:
+    def _get_default_system_prompt(self) -> str:
         """Get the default system prompt for digest generation."""
-        return """You are an assistant for creating structured digests from Telegram channel posts about ML/AI.
+        title = self.digest_title
+        return f"""You are an assistant for creating structured digests from Telegram channel posts.
 
 IMPORTANT: Format for Telegram using Markdown.
 
@@ -177,7 +189,7 @@ Content-type icons — use ONE of these instead of 🔹 for every news item:
 
 Output format for Telegram (using Markdown):
 
-**📊 ML/AI Digest — [date in format: DD Month YYYY]**
+**📊 {title} — [date in format: DD Month YYYY]**
 [One sentence: overall theme of today's digest, e.g. "Сегодня: активность вокруг агентов, один крупный инцидент, новые эмбеддинги от Google."]
 
 **⚡ Главное за день**
@@ -205,7 +217,7 @@ Output format for Telegram (using Markdown):
 
 Example of correct output:
 
-**📊 ML/AI Digest — 10 March 2026**
+**📊 {title} — 10 March 2026**
 Сегодня: доминируют агентные фреймворки, один крупный инцидент в Amazon, прорывных исследований мало.
 
 **⚡ Главное за день**
