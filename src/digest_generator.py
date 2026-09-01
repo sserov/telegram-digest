@@ -1,10 +1,10 @@
 """Digest generator service."""
 
 from typing import List
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from .telegram_fetcher import TelegramMessage
-from .cerebras_client import CerebrasClient
+from .llm_adapter import CerebrasClient
 from .config import Config
 
 _GROUP_TITLES = {
@@ -118,6 +118,3 @@ Possible reasons:
 - Check that channel names are correct (should start with @)
 - Make sure you have access to the channels
 """
-
-
-from datetime import timedelta
