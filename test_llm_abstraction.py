@@ -285,12 +285,12 @@ def test_7_provider_switching():
     return True
 
 
-def test_8_cerebras_client_adapter():
-    """Test 8: CerebrasClient works as adapter on top of LLMClient"""
-    print("\n[Test 8] CerebrasClient as Adapter")
+def test_8_digest_llm_client_adapter():
+    """Test 8: DigestLLMClient adapter works on top of LLMClient"""
+    print("\n[Test 8] llm_adapter.DigestLLMClient")
     print("-" * 60)
     
-    from src.cerebras_client import CerebrasClient
+    from src.llm_adapter import DigestLLMClient
     
     mock_response = Mock()
     mock_response.status_code = 200
@@ -305,7 +305,7 @@ def test_8_cerebras_client_adapter():
     }
     
     with patch("requests.post", return_value=mock_response):
-        cerebras = CerebrasClient(group="ai")
+        digest_llm = DigestLLMClient(group="ai")
         
         # Test that generate_digest works
         messages = [
@@ -313,11 +313,11 @@ def test_8_cerebras_client_adapter():
             {"role": "user", "content": "Create a digest from: Test message"}
         ]
         
-        result = cerebras._call_with_retry(messages)
+        result = digest_llm._call_with_retry(messages)
         
         assert result == "This is digest content", f"Wrong result: {result}"
     
-    print(f"✓ CerebrasClient._call_with_retry() uses LLMClient internally")
+    print(f"✓ DigestLLMClient._call_with_retry() uses LLMClient internally")
     print(f"✓ Result: {result[:50]}...")
     print("✅ PASSED")
     return True
@@ -337,7 +337,7 @@ def run_all_tests():
         test_5_empty_response_handling,
         test_6_backward_compatibility,
         test_7_provider_switching,
-        test_8_cerebras_client_adapter,
+        test_8_digest_llm_client_adapter,
     ]
     
     passed = 0

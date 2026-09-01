@@ -26,7 +26,7 @@
 └────────┬─────────┘                            │
          │                                      ▼
          │                            ┌──────────────────┐
-         │                            │ CerebrasClient   │
+         │                            │ DigestLLMClient  │
          │                            │                  │
          │                            │ - Generate       │
          │                            │ - Map-reduce     │
@@ -97,7 +97,7 @@
     │                                  │
     └──────────────┬───────────────────┘
                    ▼
-6. LLM PROCESSING (Cerebras)
+6. LLM PROCESSING
    │
    ├─ System Prompt:
    │  └─ "Analyze content, identify natural categories, create summaries, keep links..."

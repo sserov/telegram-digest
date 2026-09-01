@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Provider-specific code paths
 
 ### Technical
-- `CerebrasClient` now acts as an adapter on top of `LLMClient`
+- `DigestLLMClient` adapter acts on top of `LLMClient`
 - OpenAI-compatible request/response format for all providers
 - Retry logic with exponential backoff (30s, 60s, 120s) for rate limits
 - Comprehensive error handling for different HTTP status codes
@@ -44,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Empty response handling
   - Backward compatibility
   - Provider configuration
-  - CerebrasClient adapter
+  - DigestLLMClient adapter
 
 ## [0.6.0] - 2025-10-13
 

@@ -1,9 +1,4 @@
-"""LLM adapter for digest generation (OpenAI-compatible API abstraction).
-
-This adapter provides backward compatibility with the old CerebrasClient interface
-while using the new provider-agnostic LLMClient internally. It works with any
-OpenAI-compatible LLM provider (Cerebras, Groq, Together, OpenAI, etc.).
-"""
+"""Digest LLM adapter over provider-agnostic OpenAI-compatible HTTP client."""
 
 from typing import List, Dict, Any, Optional
 
@@ -22,18 +17,12 @@ def _group_title(group: str) -> str:
     return _GROUP_TITLES.get(group.lower(), f"{group.title()} Digest" if group else "Digest")
 
 
-class CerebrasClient:
-    """
-    Adapter for backward compatibility.
-    Uses OpenAI-compatible LLMClient internally.
-    """
+class DigestLLMClient:
+    """Digest generation client built on top of LLMClient."""
 
     def __init__(self, group: str = ""):
         """
-        Initialize LLM adapter for digest generation.
-        
-        Uses LLMClient internally to support any OpenAI-compatible provider.
-        Maintains backward compatibility with legacy CerebrasClient interface.
+        Initialize digest LLM client.
         """
         self.llm = LLMClient()
         self.group = group

@@ -171,7 +171,7 @@ Check that the channel name is correct and starts with @.
 ## What's Next?
 
 1. **Automation**: Set up cron for daily runs
-2. **Customization**: Change prompts in `src/cerebras_client.py`
+2. **Customization**: Change prompts in `src/llm_adapter.py`
 3. **Add channels**: Edit the list in command or config
 4. **Bot setup**: Get token from @BotFather for Telegram sending (required)
 
