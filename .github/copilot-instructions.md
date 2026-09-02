@@ -8,7 +8,7 @@ This is a Telegram Digest Generator that collects posts from Telegram channels, 
 
 - **Python 3.9+**: Main language
 - **Telethon**: Telegram API client (for reading messages only)
-- **Cerebras Cloud SDK**: LLM for digest generation
+- **OpenAI-compatible LLM APIs**: via provider-agnostic HTTP client
 - **Telegram Bot API**: HTTP requests for sending digests (HTML formatting)
 - **requests**: For Bot API HTTP calls
 
@@ -17,7 +17,7 @@ This is a Telegram Digest Generator that collects posts from Telegram channels, 
 ### Core Components
 
 1. **TelegramFetcher** (`telegram_fetcher.py`): Reads messages from channels using Telethon
-2. **CerebrasClient** (`cerebras_client.py`): Generates digests using LLM
+2. **DigestLLMClient adapter** (`llm_adapter.py`): Generates digests using LLM
 3. **DigestGenerator** (`digest_generator.py`): Orchestrates the digest creation process
 4. **OutputHandler** (`output_handler.py`): Saves to files and sends via Bot API
 5. **Config** (`config.py`): Centralized configuration and environment variables
@@ -134,7 +134,7 @@ When adding new output methods:
 
 ### Extending Prompts
 
-When modifying LLM prompts in `CerebrasClient`:
+When modifying LLM prompts in `DigestLLMClient` adapter (`llm_adapter.py`):
 1. Keep system prompt clear and structured
 2. Use explicit formatting rules
 3. Include examples for clarity
@@ -228,7 +228,8 @@ telegram-digest/
 │   ├── main.py                  ← Entry point, CLI args
 │   ├── config.py                ← Configuration management
 │   ├── telegram_fetcher.py      ← Fetch messages (Telethon)
-│   ├── cerebras_client.py       ← LLM client
+│   ├── llm_adapter.py           ← Digest adapter (DigestLLMClient)
+│   ├── llm_client.py            ← OpenAI-compatible LLM HTTP client
 │   ├── digest_generator.py      ← Orchestration
 │   └── output_handler.py        ← Output (file, Bot API)
 ├── .env                         ← Environment variables (not in git)

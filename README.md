@@ -238,9 +238,53 @@ For detailed setup instructions and troubleshooting, see [CRON_SETUP.md](CRON_SE
 Main settings in `src/config.py`:
 
 - `MAX_TOKENS_PER_CHUNK`: maximum tokens per chunk (default 50000)
-- `CEREBRAS_MODEL`: Cerebras model (default "llama3.1-70b")
 - `TEMPERATURE`: generation temperature (default 0.0)
 - `MAX_TOKENS_RESPONSE`: maximum response length (default 4000)
+
+## LLM Provider Support
+
+As of v0.7.0, the system supports **any OpenAI-compatible LLM API provider**. Switch providers by editing `.env`:
+
+### Supported Providers
+
+| Provider | URL | Model Examples | Speed | Cost | Best For |
+|----------|-----|---|-------|------|----------|
+| **Cerebras** | `https://api.cerebras.ai/v1` | `llama3.1-70b` | Fast | Premium | Quality outputs, high context |
+| **Groq** | `https://api.groq.com/openai/v1` | `mixtral-8x7b-32768` | ⚡ Fastest | Free tier | Fast processing, cost-effective |
+| **Together AI** | `https://api.together.xyz/v1` | `meta-llama/Llama-3-70b-chat-hf` | Fast | Paid | Flexible model selection |
+| **OpenAI** | `https://api.openai.com/v1` | `gpt-4-turbo` | Standard | Expensive | High quality (GPT-4) |
+| **Local** | `http://localhost:8000/v1` | Your local models | Variable | Free | Self-hosted, privacy |
+
+### How to Switch Providers
+
+1. Get API credentials from your chosen provider
+2. Update these variables in `.env`:
+   ```ini
+   LLM_PROVIDER=groq
+   LLM_API_URL=https://api.groq.com/openai/v1
+   LLM_API_KEY=gsk_...your-groq-key...
+   LLM_MODEL=mixtral-8x7b-32768
+   ```
+3. Run normally - **no code changes needed!**
+
+### Example: Using Groq
+
+```bash
+# Update .env
+sed -i 's/LLM_PROVIDER=cerebras/LLM_PROVIDER=groq/' .env
+sed -i 's|LLM_API_URL=.*|LLM_API_URL=https://api.groq.com/openai/v1|' .env
+sed -i 's/LLM_API_KEY=.*/LLM_API_KEY=gsk_your_groq_key/' .env
+sed -i 's/LLM_MODEL=.*/LLM_MODEL=mixtral-8x7b-32768/' .env
+
+# Run digest generation
+python -m src.main --channels @your_channel
+```
+
+### Backward Compatibility
+
+- If `LLM_API_KEY` is not set, falls back to `CEREBRAS_API_KEY`
+- If `LLM_MODEL` is not set, falls back to `CEREBRAS_MODEL`
+- Existing configurations continue to work without changes
 
 ## Project Structure
 
@@ -250,8 +294,9 @@ telegram-digest/
 │   ├── __init__.py
 │   ├── main.py              # Entry point
 │   ├── config.py            # Configuration
+│   ├── llm_client.py        # OpenAI-compatible LLM client (provider-agnostic)
 │   ├── telegram_fetcher.py  # Collect posts from Telegram
-│   ├── cerebras_client.py   # Cerebras AI integration
+│   ├── llm_adapter.py       # Adapter for digest generation
 │   ├── digest_generator.py  # Digest generation
 │   └── output_handler.py    # Save and send results
 ├── requirements.txt
@@ -290,7 +335,7 @@ Uses **HTML formatting** when sent to Telegram (converted from Markdown internal
 1. **[OpenAI Agent Builder анонсирован](https://t.me/data_secrets/7957)** — Low-code платформа для оркестрации агентов
    *[Data Secrets, 06.10.2025]*
 
-**� Кадровые перемены**
+**🧑‍💼 Кадровые перемены**
 
 📝 *Anthropic укрепляет техническое руководство, делая ставку на инфраструктуру.*
 
@@ -388,11 +433,11 @@ The project follows a modular architecture:
 ```
 User Input → TelegramFetcher → Messages → DigestGenerator
                                               ↓
-                                         CerebrasClient
+                                         LLMClient
                                               ↓
-                                      Generated Digest
+                                       Generated Digest
                                               ↓
-                                        OutputHandler → File/Telegram/Console
+                                         OutputHandler → File/Telegram/Console
 ```
 
 See `ARCHITECTURE.md` for more details
@@ -458,12 +503,13 @@ If you have questions or suggestions:
 - **[DEVELOPMENT.md](DEVELOPMENT.md)** - Development setup and contribution guide
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and design
 - **[CRON_SETUP.md](CRON_SETUP.md)** - Cron scheduling guide (local/VPS)
+- **[PROVIDER_SWITCHING.md](PROVIDER_SWITCHING.md)** - Provider switching guide
 - **[CHANGELOG.md](CHANGELOG.md)** - Version history and changes
 
 ## Author
 
 Created as a PoC for automated Telegram digest generation with Cerebras AI.
 
-**Version**: 0.6.0  
+**Version**: 0.7.0  
 **Status**: Production-ready  
-**Last Updated**: October 2025
+**Last Updated**: September 2026

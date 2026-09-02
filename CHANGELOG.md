@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2025-09-01
+
+### Added
+- **🔄 LLM Provider Abstraction** - Support for any OpenAI-compatible LLM API
+  - New `LLMClient` class for provider-agnostic API calls
+  - Support for Cerebras, Groq, Together AI, OpenAI, and self-hosted solutions
+  - Switch providers by updating `.env` variables only - no code changes needed
+  
+### Improved
+- **Configuration System** - New LLM provider settings:
+  - `LLM_PROVIDER`: Select provider (cerebras, groq, together, openai, local, etc.)
+  - `LLM_API_URL`: Provider API endpoint
+  - `LLM_API_KEY`: API key (falls back to CEREBRAS_API_KEY for compatibility)
+  - `LLM_MODEL`: Model selection per provider
+  
+- **Backward Compatibility**:
+  - Existing CEREBRAS_API_KEY and CEREBRAS_MODEL still work
+  - No changes required for current users
+  - Seamless fallback to legacy configuration
+
+### Removed
+- Dependency on `cerebras-cloud-sdk` (now using standard `requests` library)
+- Provider-specific code paths
+
+### Technical
+- `DigestLLMClient` adapter acts on top of `LLMClient`
+- OpenAI-compatible request/response format for all providers
+- Retry logic with exponential backoff (30s, 60s, 120s) for rate limits
+- Comprehensive error handling for different HTTP status codes
+
+### Testing
+- Added `test_llm_abstraction.py` with 8 comprehensive unit tests:
+  - LLMClient initialization
+  - OpenAI-compatible request format validation
+  - Retry logic on 429 rate limits
+  - Error handling (401, 403, 400, 500+)
+  - Empty response handling
+  - Backward compatibility
+  - Provider configuration
+  - DigestLLMClient adapter
+
 ## [0.6.0] - 2025-10-13
 
 ### Added

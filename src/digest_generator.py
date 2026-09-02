@@ -1,10 +1,10 @@
 """Digest generator service."""
 
 from typing import List
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from .telegram_fetcher import TelegramMessage
-from .cerebras_client import CerebrasClient
+from .llm_adapter import DigestLLMClient
 from .config import Config
 
 _GROUP_TITLES = {
@@ -18,11 +18,11 @@ def _group_title(group: str) -> str:
 
 
 class DigestGenerator:
-    """Generates digests from Telegram messages using Cerebras AI."""
+    """Generates digests from Telegram messages using configured LLM provider."""
 
     def __init__(self, group: str = ""):
         self.group = group
-        self.cerebras = CerebrasClient(group=group)
+        self.llm_client = DigestLLMClient(group=group)
 
     def generate_digest(
         self,
@@ -54,11 +54,11 @@ class DigestGenerator:
         # Decide whether to use simple or map-reduce approach
         if estimated_tokens <= Config.MAX_TOKENS_PER_CHUNK:
             print("Using single-pass generation...")
-            digest = self.cerebras.generate_digest(messages_text)
+            digest = self.llm_client.generate_digest(messages_text)
         else:
             print("Using map-reduce approach for large dataset...")
             chunks = self._split_into_chunks(messages_text)
-            digest = self.cerebras.generate_digest_map_reduce(chunks)
+            digest = self.llm_client.generate_digest_map_reduce(chunks)
 
         # LLM now generates the digest with header included
         return digest
@@ -118,6 +118,3 @@ Possible reasons:
 - Check that channel names are correct (should start with @)
 - Make sure you have access to the channels
 """
-
-
-from datetime import timedelta

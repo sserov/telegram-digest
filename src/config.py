@@ -22,7 +22,13 @@ class Config:
     TELEGRAM_BOT_TOKEN: Optional[str] = os.getenv("TELEGRAM_BOT_TOKEN")
     OUTPUT_TELEGRAM_CHANNEL: Optional[str] = os.getenv("OUTPUT_TELEGRAM_CHANNEL")
 
-    # Cerebras AI settings
+    # LLM Provider settings (OpenAI-compatible API)
+    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "cerebras")
+    LLM_API_URL: str = os.getenv("LLM_API_URL", "https://api.cerebras.ai/v1")
+    LLM_API_KEY: str = os.getenv("LLM_API_KEY", os.getenv("CEREBRAS_API_KEY", ""))
+    LLM_MODEL: str = os.getenv("LLM_MODEL", os.getenv("CEREBRAS_MODEL", "llama3.1-70b"))
+    
+    # Legacy Cerebras settings (deprecated, use LLM_* instead)
     CEREBRAS_API_KEY: str = os.getenv("CEREBRAS_API_KEY", "")
     CEREBRAS_MODEL: str = os.getenv("CEREBRAS_MODEL", "llama3.1-70b")
     TEMPERATURE: float = float(os.getenv("TEMPERATURE", "0.0"))
@@ -46,8 +52,8 @@ class Config:
         if not cls.TELEGRAM_API_HASH:
             errors.append("TELEGRAM_API_HASH is not set")
 
-        if not cls.CEREBRAS_API_KEY:
-            errors.append("CEREBRAS_API_KEY is not set")
+        if not cls.LLM_API_KEY:
+            errors.append("LLM_API_KEY is not set (or CEREBRAS_API_KEY for backward compatibility)")
 
         if errors:
             raise ValueError(

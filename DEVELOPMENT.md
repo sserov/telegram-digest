@@ -9,7 +9,8 @@ telegram-digest/
 │   ├── main.py               # CLI entry point
 │   ├── config.py             # Configuration management
 │   ├── telegram_fetcher.py   # Telegram API integration
-│   ├── cerebras_client.py    # Cerebras AI client
+│   ├── llm_adapter.py        # Digest LLM adapter (DigestLLMClient)
+│   ├── llm_client.py         # OpenAI-compatible LLM HTTP client
 │   ├── digest_generator.py   # Digest generation logic
 │   └── output_handler.py     # Output handling (file, Telegram)
 ├── example_usage.py          # Usage examples
@@ -31,9 +32,10 @@ telegram-digest/
    - Filters messages by date range
    - Extracts URLs and metadata
 
-2. **CerebrasClient** (`cerebras_client.py`)
-   - Integrates with Cerebras AI API
+2. **DigestLLMClient Adapter** (`llm_adapter.py`)
+   - Provides `DigestLLMClient` for digest generation
    - Manages prompts for digest generation
+   - Uses provider-agnostic `LLMClient` under the hood
    - Handles map-reduce for large datasets
 
 3. **DigestGenerator** (`digest_generator.py`)
@@ -61,7 +63,7 @@ telegram-digest/
    ↓
 3. DigestGenerator.generate_digest()
    ↓
-4. CerebrasClient.generate_digest() or generate_digest_map_reduce()
+4. llm_adapter.DigestLLMClient.generate_digest() or generate_digest_map_reduce()
    ↓
 5. OutputHandler (save to file / send to Telegram)
 ```
@@ -95,9 +97,9 @@ All configuration is centralized in `src/config.py`. To add new settings:
 
 ### Adding a New LLM Provider
 
-1. Create new client class similar to `CerebrasClient`
-2. Implement `generate_digest()` and `generate_digest_map_reduce()` methods
-3. Update `DigestGenerator` to support provider selection
+1. Ensure provider supports OpenAI-compatible API
+2. Configure `LLM_PROVIDER`, `LLM_API_URL`, `LLM_API_KEY`, `LLM_MODEL`
+3. Reuse `LLMClient` + `llm_adapter.DigestLLMClient` interface
 
 ### Adding New Output Formats
 
@@ -107,7 +109,7 @@ All configuration is centralized in `src/config.py`. To add new settings:
 
 ### Customizing Prompts
 
-Edit prompts in `CerebrasClient`:
+Edit prompts in `llm_adapter.DigestLLMClient`:
 - `_get_default_system_prompt()`: System instructions
 - `_create_user_prompt()`: User message format
 - `_create_reduce_prompt()`: Map-reduce combination prompt
@@ -141,7 +143,7 @@ Recommended structure:
 ```
 tests/
 ├── test_telegram_fetcher.py
-├── test_cerebras_client.py
+├── test_llm_abstraction.py
 ├── test_digest_generator.py
 └── test_output_handler.py
 ```
